@@ -1,0 +1,32 @@
+Here is where I sketch out my ideas for the Arachnid chrome extension.
+
+
+Plan:
+
+1. Create graph from current session of chrome
+2. Create visualization of graph
+3. Make visualization interactive -> edit vis = edit actual path
+4. Add heuristics to allow different kinds of pathmarks (from current tab, time, etc.)
+
+
+
+Need to show options for the path to be marked:
+1. get a path from history by time cluster - for all of these, show option
+2. get a path from history by explicit links - option visualization should be pMark visual
+3. use time cluster but also add any explicit linked tabs
+
+Need to have a pathmark visualization
+
+Need to allow visual reordering of pathmarks
+
+Need to have folders for pathmarks
+
+Need to upload pathmarks to my servers 
+
+TODO:
+today - get a list for the path and display it
+
+1 week - be able to put the lists into bookmark folders
+3 week - implement visualization and visual reordering
+4 week- have a backend to save all the stuff
+
