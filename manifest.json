@@ -7,5 +7,9 @@
     "default_popup": "spider.html",
     "default_icon": "clock.png"
   },
+  "background": {
+    "scripts": ["daemon.js"],
+    "persistent": true
+  },
   "manifest_version": 2
 }
