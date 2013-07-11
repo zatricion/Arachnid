@@ -33,7 +33,6 @@ function buildPopupDom(divName, data) {
   }
 }
 
-chrome.webNavigation.onCommitted.addListener(function(details) { console.log(details) });
 
 
 // Function that gets active tab and finds visitItems with the same url
