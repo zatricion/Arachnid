@@ -8,7 +8,7 @@
     "default_icon": "clock.png"
   },
   "background": {
-    "scripts": ["daemon.js"],
+    "scripts": ["daemon.js", "jquery-1.9.1.min.js"],
     "persistent": true
   },
   "content_scripts": [
