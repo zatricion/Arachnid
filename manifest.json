@@ -11,5 +11,11 @@
     "scripts": ["daemon.js"],
     "persistent": true
   },
+  "content_scripts": [
+  {
+      "matches": ["http://*/*","https://*/*"],
+      "js": ["content.js"]
+    }
+  ],
   "manifest_version": 2
 }
