@@ -1,7 +1,7 @@
 {
   "name": "Spider",
   "version": "1.1",
-  "description": "Reads your history, and shows the top ten pages you go to by typing the URL.",
+  "description": "Creates pathmarks.",
   "permissions": ["history", "tabs", "webNavigation", "storage"],
   "browser_action": {
     "default_popup": "spider.html",
