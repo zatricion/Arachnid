@@ -8,9 +8,8 @@ function addNode(url, referrer) {
   nodes.get(url, function(current_node){
     console.log(current_node);
     if ( $.isEmptyObject(current_node) === false ) {
-      current_node[url].push(edge);
-      var node = {};
-      node[url] = [edge];
+      var node = current_node;
+      node[url].push(edge);
       nodes.remove(url);
       nodes.set(node, function(response){
         if ( chrome.runtime.lastError ) {
