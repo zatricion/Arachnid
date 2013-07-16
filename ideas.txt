@@ -7,7 +7,6 @@ Plan:
 2. Create visualization of graph
 3. Make visualization interactive -> edit vis = edit actual path
 4. Add heuristics to allow different kinds of pathmarks (from current tab, time, etc.)
-5. Be low-level badasses
 
 
 Need to show options for the path to be marked:
