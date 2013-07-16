@@ -33,34 +33,17 @@ function buildPopupDom(divName, data) {
   }
 }
 
+var nodes = chrome.storage.local;
+var pmarks = chrome.storage.sync;
 
-
-// Function that gets active tab and finds visitItems with the same url
+// Function that gets active tab url and creates a simple pathmark by tracing
+// referring urls back to the empty string
 chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-    var url = tabs[0].url;
-    var getThisVisitWithUrl = function (url) {
-        return function (visitItems) {
-            getThisVisit(url, visitItems);
-        };
-    };
-    chrome.history.getVisits({url: url}, getThisVisitWithUrl(url));
+  var url = tabs[0].url;
+  while (url) {
+         
+  }
 });
-
-var getThisVisit = function (url, visitItems) {
-    if (!visitItems[0]) {
-        return 1
-    }
-    var most_recent = visitItems[0].visitTime; 
-    var mr_index = 0;
-    for (var i = 0, ie = visitItems.length; i < ie; ++i) {
-        if (visitItems[i].visitTime > most_recent)  {
-            mr_index = i; 
-        }
-    }
-    var thisVisit = visitItems[mr_index];
-    console.log(thisVisit);
-    return thisVisit;
-};
 
 // Search history to find up to ten links that a user has typed in,
 // and show those links in a popup.

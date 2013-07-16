@@ -1,6 +1,6 @@
 function addNode(url, referrer) {
-  nodes = chrome.storage.local;
-  edge = {
+  var nodes = chrome.storage.local;
+  var edge = {
     in_node: referrer,
     timestamp: Date()
   };
