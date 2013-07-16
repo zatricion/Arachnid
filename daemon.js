@@ -1,5 +1,3 @@
-;
-
 function addNode(url, referrer) {
   nodes = chrome.storage.local;
   edge = {
@@ -11,8 +9,10 @@ function addNode(url, referrer) {
     console.log(current_node);
     if ( $.isEmptyObject(current_node) === false ) {
       current_node[url].push(edge);
+      var node = {};
+      node[url] = [edge];
       nodes.remove(url);
-      nodes.set({url:current_node}, function(response){
+      nodes.set(node, function(response){
         if ( chrome.runtime.lastError ) {
           console.log(chrome.runtime.lastError);
         }
@@ -23,7 +23,9 @@ function addNode(url, referrer) {
     }
     else {
       console.log("set: "+url);
-      nodes.set({url:[edge]}, function(){
+      var node = {};
+      node[url] = [edge];
+      nodes.set(node, function(){
         if ( chrome.runtime.lastError ) {
           console.log(chrome.runtime.lastError);
         }
