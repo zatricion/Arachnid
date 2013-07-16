@@ -36,13 +36,26 @@ function buildPopupDom(divName, data) {
 var nodes = chrome.storage.local;
 var pmarks = chrome.storage.sync;
 
-// Function that gets active tab url and creates a simple pathmark by tracing
-// referring urls back to the empty string
+// Function that take a url and creates a pathmark by tracing
+// referring urls back to the empty string and saving them to sync storage
+var savePath = function (myUrl) {
+  if (myUrl) {
+    nodes.get(myUrl, function (edges) {
+      var node = {};
+      node[myUrl] = edges;
+      pmarks.set(node);
+      for (var edge in edges[myUrl]) {
+        var thisEdgeUrl = edge.in_node; 
+        savePath(thisEdgeUrl);
+      }
+    });
+  }
+}
+
+// Get active tab url and save pathmark to sync storage
 chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
   var url = tabs[0].url;
-  while (url) {
-         
-  }
+  savePath(url);
 });
 
 // Search history to find up to ten links that a user has typed in,
