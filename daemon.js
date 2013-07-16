@@ -6,7 +6,6 @@ function addNode(url, referrer) {
   };
 
   nodes.get(url, function(current_node){
-    console.log(current_node);
     if ( $.isEmptyObject(current_node) === false ) {
       var node = current_node;
       node[url].push(edge);
@@ -28,7 +27,6 @@ function addNode(url, referrer) {
           console.log(chrome.runtime.lastError);
         }
         else {
-          chrome.storage.local.get(url, function(thing) {console.log(thing)});
           console.log("Created new Node for url " + url + " and new edge from " + edge.in_node + " at time " + edge.timestamp);
         }
       });
