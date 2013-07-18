@@ -30,11 +30,15 @@ var savePath = function (myUrl, mark_name) {
 }
 
 // Get active tab url and save pathmark to sync storage
-var pmarkByLink = function (mark_name) {
+var pmarkByLink = function () {
   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+    var title = tabs[0].title;
+    console.log(title);
     var url = tabs[0].url;
     var stripped = url.substr(url.indexOf(':') + 1);
-    savePath(stripped, mark_name);
+    //window.location.replace("add_mark.html");
+    //window.document.getElementById("title").value = title;
+    savePath(stripped, title);
     pmarks.set(pathmark);
   });
 }
@@ -44,10 +48,9 @@ var buildMenu =  function (divName) {
   var anchors = menu.getElementsByTagName('a');
   for (var i = 0; i < anchors.length; ++i) {
     anchors[i].addEventListener('click', function () {
-        window.location.href="add_mark.html";
         //TODO: put default in add_mark.html, highlight it, add enter button, get string
         //to put into pmarkByLink 
-        pmarkByLink("somuchwin");
+        pmarkByLink();
       }, false);
   }
 }
