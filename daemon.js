@@ -5,32 +5,24 @@ function addNode(url, referrer) {
     timestamp: Date()
   };
 
-  nodes.get(url, function(current_node){
-    if ( $.isEmptyObject(current_node) === false ) {
-      var node = current_node;
-      node[url].push(edge);
-      nodes.remove(url);
-      nodes.set(node, function(response){
-        if ( chrome.runtime.lastError ) {
-          console.log(chrome.runtime.lastError);
+  nodes.get(url, function(currentNode){
+    currentNode[url] = currentNode[url] || [];
+    currentNode[url].push(edge);
+    nodes.set(currentNode, function(response){
+      if ( chrome.runtime.lastError ) {
+        console.log(chrome.runtime.lastError);
+      }
+      else {
+        if (currentNode[url].length > 1) {
+          console.log("Updated Node with url " + url + " and created new edge from " + 
+            edge.in_node + " at time " + edge.timestamp);
         }
         else {
-          console.log("Updated Node with url " + url + " and created new edge from " + edge.in_node + " at time " + edge.timestamp);
+          console.log("Created new Node for url " + url + " and new edge from " + 
+            edge.in_node + " at time " + edge.timestamp);
         }
-      });
-    }
-    else {
-      var node = {};
-      node[url] = [edge];
-      nodes.set(node, function(){
-        if ( chrome.runtime.lastError ) {
-          console.log(chrome.runtime.lastError);
-        }
-        else {
-          console.log("Created new Node for url " + url + " and new edge from " + edge.in_node + " at time " + edge.timestamp);
-        }
-      });
-    }
+      }
+    });
   });
 }
 
