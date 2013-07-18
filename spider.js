@@ -1,7 +1,8 @@
 
 var nodes = chrome.storage.local;
 var pmarks = chrome.storage.sync;
-var pathmark = {}
+var pathmark = {};
+var saveCount = 0;
 
 // TODO: Implement user interface and let user save pathmark as something -
 // that thing is then the key to a storage.sync object which contains the pathmark
@@ -9,6 +10,7 @@ var pathmark = {}
 // Function that take a url and creates a pathmark by tracing
 // referring urls back to the empty string and saving them to sync storage
 var savePath = function (myUrl, mark_name) {
+  saveCount++;
   if (myUrl) {
     nodes.get(myUrl, function (urlObj) {
       var edges = urlObj[myUrl];
@@ -25,6 +27,11 @@ var savePath = function (myUrl, mark_name) {
           savePath(element.in_node, mark_name);
         });
       }
+      saveCount--;  
+      if (saveCount == 0) {
+        console.log(pathmark);
+        pmarks.set(pathmark);
+      }
     });
   }
 }
@@ -33,13 +40,11 @@ var savePath = function (myUrl, mark_name) {
 var pmarkByLink = function () {
   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
     var title = tabs[0].title;
-    console.log(title);
     var url = tabs[0].url;
     var stripped = url.substr(url.indexOf(':') + 1);
     //window.location.replace("add_mark.html");
-    //window.document.getElementById("title").value = title;
+    //$("#title").val(title)
     savePath(stripped, title);
-    pmarks.set(pathmark);
   });
 }
 
@@ -48,10 +53,10 @@ var buildMenu =  function (divName) {
   var anchors = menu.getElementsByTagName('a');
   for (var i = 0; i < anchors.length; ++i) {
     anchors[i].addEventListener('click', function () {
-        //TODO: put default in add_mark.html, highlight it, add enter button, get string
-        //to put into pmarkByLink 
-        pmarkByLink();
-      }, false);
+      //TODO: put default in add_mark.html, highlight it, add enter button, get string
+      //to put into pmarkByLink 
+      pmarkByLink();
+    }, false);
   }
 }
 
