@@ -1,5 +1,7 @@
+var nodes = chrome.storage.local;
+var pmarks = chrome.storage.sync;
+
 function addNode(url, referrer) {
-  var nodes = chrome.storage.local;
   var edge = {
     in_node: referrer,
     timestamp: Date()
@@ -26,10 +28,56 @@ function addNode(url, referrer) {
   });
 }
 
+
+// TODO: Implement user interface and let user save pathmark as something -
+// that thing is then the key to a storage.sync object which contains the pathmark
+
+var handleReferrers = function(referrers, output, callback) {
+  if (referrers.length > 0) {
+    savePath(referrers[0].in_node, output, function(newOutput) {
+      handleReferrers(referrers.slice(1), newOutput, callback);
+    });
+  } else {
+    callback(output);
+  }
+};
+
+var savePath = function(url, output, callback) {
+  nodes.get(url, function(refObj) {
+    // First predicate stops infinite loops and re-adding objects
+    if (output[url] === undefined && refObj[url] !== undefined) {
+      var referrers = refObj[url];
+      output[url] = referrers;
+      handleReferrers(referrers, output, function(finalOutput) {
+        callback(finalOutput);
+      });
+    } else {
+      callback(output);
+    }
+  });
+};
+
+var createPathmark = function (stripped, title) {
+  savePath(stripped, {}, function (output) {
+    var pathmark = {};
+    pathmark[title] = output;
+    pmarks.set(pathmark);
+  });
+}
+
+//           //
+// LISTENERS //
+//           //
+
 var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ?
                          'runtime' : 'extension';
 
 chrome[runtimeOrExtension].onMessage.addListener(
   function(request, sender, sendResponse) {
-    addNode(request.url, request.referrer);
+    if (request.message_type === "node") {
+      addNode(request.url, request.referrer);
+    }
+    else if (request.message_type === "pathmark") {
+      createPathmark(request.url, request.name);
+    }
  });
