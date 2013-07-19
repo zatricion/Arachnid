@@ -3,10 +3,6 @@ Here is where I sketch out my ideas for the Arachnid chrome extension.
 
 Plan:
 
-TODAY: set up user click event in popup -> pathmark created, default name (how do bookmarks do it?)
-       use name of pathmark as key in sync storage for all the rest of pathmark
-       Do some CSS stuff 
-
 NEXT: D3 Visualization for graph
       allow user to choose refer/refer+time/just time pathmarks (others?)
       allow user to choose force-directed or timeline graph 
