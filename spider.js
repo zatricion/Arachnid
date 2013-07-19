@@ -9,6 +9,7 @@ var pmarkByLink = function () {
       title: title,
       url: stripped
     }
+    // Changes popup html and sends title and url
     window.location.replace("add_mark.html#" + JSON.stringify(info));
   });
 }
@@ -18,8 +19,6 @@ var buildMenu =  function (divName) {
   var anchors = menu.getElementsByTagName('a');
   for (var i = 0; i < anchors.length; ++i) {
     anchors[i].addEventListener('click', function () {
-      //TODO: put default in add_mark.html, highlight it, add enter button, get string
-      //to put into pmarkByLink 
       pmarkByLink();
     }, false);
   }
