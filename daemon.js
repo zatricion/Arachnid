@@ -1,5 +1,11 @@
+;
+
 var nodes = chrome.storage.local;
 var pmarks = chrome.storage.sync;
+
+// Clear chrome local storage each session
+nodes.clear();
+console.log("Cleared local storage");
 
 function addNode(url, referrer) {
   var edge = {
