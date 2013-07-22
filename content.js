@@ -7,11 +7,15 @@ var REF = document.referrer;
 var REF = REF.substr(REF.indexOf(':') + 1);
 
 // Compatibility
-var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ?
-                         'runtime' : 'extension';
+var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
 
-// Keeps track of visit history                         
-chrome[runtimeOrExtension].sendMessage({message_type:"node", referrer:REF, url:URL});
+// Keeps track of visit history
+document.onreadystatechange = function () {
+  if (document.readyState == "complete") {
+    chrome[runtimeOrExtension].sendMessage({message_type:"node", referrer:REF, url:URL});
+  }
+}
+
 
 //
 // Visualization
@@ -21,7 +25,10 @@ var getPathmark = function (name, links) {
   chrome.storage.sync.get(null, function (pathmarks) {
     for (elem in pathmarks[name]) { 
       pathmarks[name][elem].forEach(function(thing, index) {
-        var thing2 = {source: thing.in_node, target: elem, time: thing.timestamp}; 
+        var thing2 = {source: thing.in_node,
+                      target: elem,
+                      time: thing.timestamp, 
+                      favicon: thing.favicon}; 
         links.push(thing2);
       }); 
     }

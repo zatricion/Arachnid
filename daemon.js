@@ -7,9 +7,38 @@ var pmarks = chrome.storage.sync;
 nodes.clear();
 console.log("Cleared local storage");
 
-function addNode(url, referrer) {
+var createNode = function (url, referrer) {
+  urlMatch = '*:' + url;
+  chrome.tabs.query({url: urlMatch}, function(tabs) {
+    var tab = tabs[0];
+    var newUrl = tab.url ? tab.url.replace(/#.*$/, '') : ''; // drop #hash
+    var favicon;
+    var delay;
+
+    if (tab.favIconUrl && tab.favIconUrl != '' 
+      && tab.favIconUrl.indexOf('chrome://favicon/') == -1) {
+      // favicon appears to be a normal url
+      favicon = tab.favIconUrl;
+    delay = 0;
+  }
+    else {
+      // couldn't obtain favicon as a normal url, try chrome://favicon/url
+      favicon = 'chrome://favicon/' + newUrl;
+      delay = 2000; // larger values will probably be more reliable
+    }
+
+  setTimeout(function() {
+    // set favicon wherever it needs to be set here
+    saveNode(url, referrer, favicon);
+  }, delay);
+  });
+}
+
+
+var saveNode = function (url, referrer, favicon) {
   var edge = {
     in_node: referrer,
+    favicon: favicon,
     timestamp: Date()
   };
 
@@ -81,7 +110,7 @@ var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ?
 chrome[runtimeOrExtension].onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.message_type === "node") {
-      addNode(request.url, request.referrer);
+      createNode(request.url, request.referrer);
     }
     else if (request.message_type === "pathmark") {
       createPathmark(request.url, request.name);

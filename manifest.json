@@ -2,7 +2,7 @@
   "name": "Spider",
   "version": "1.1",
   "description": "Creates pathmarks.",
-  "permissions": ["history", "tabs", "webNavigation", "storage"],
+  "permissions": ["history", "tabs", "webNavigation", "storage", "chrome://favicon/"],
   "browser_action": {
     "default_popup": "spider.html",
     "default_icon": "spider.png"
