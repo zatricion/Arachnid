@@ -14,18 +14,42 @@ var pmarkByLink = function () {
   });
 }
 
+var startVisualization = function () {
+
+  chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+    console.log(tabs[0]);
+    chrome.tabs.sendMessage(tabs[0].id, {message_type:"visual"});
+  });
+  window.close();
+}
+
 var buildMenu =  function (divName) {
   var menu = document.getElementById(divName);
   var anchors = menu.getElementsByTagName('a');
-  for (var i = 0; i < anchors.length; ++i) {
-    anchors[i].addEventListener('click', function () {
-      pmarkByLink();
-    }, false);
-  }
-}
+  
+  // Links (right now the choices are all the same)
+  anchors[0].addEventListener('click', function () {
+    pmarkByLink();
+  }, false);
 
-var microsecondsPerHour = 1000 * 60 * 60;
-var oneHourAgo = (new Date).getTime() - microsecondsPerHour;
+  // Time Slice
+  anchors[1].addEventListener('click', function () {
+    pmarkByLink();
+  }, false);
+
+  // Both
+  anchors[2].addEventListener('click', function () {
+    pmarkByLink();
+  }, false);
+
+
+  // Visualize Pathmarks
+  anchors[3].addEventListener('click', function () {
+    startVisualization();
+  }, false);
+
+
+}
 
 document.addEventListener('DOMContentLoaded', function () {
  buildMenu('menu');

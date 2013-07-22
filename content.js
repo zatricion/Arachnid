@@ -14,3 +14,34 @@ chrome[runtimeOrExtension].sendMessage({message_type:"node", referrer:REF, url:U
     function() {});
 
 
+
+// Visualization
+
+var onWindowResize = function (event) {
+  overlay.width = window.innerWidth;
+  overlay.height = window.innerHeight;
+}
+
+var visualize = function () {
+  overlay = document.createElement( 'canvas' );
+  document.body.appendChild(overlay);
+  overlayContext = overlay.getContext( '2d' );
+  overlay.style.position = 'fixed';
+  overlay.style.left = 0;
+  overlay.style.top = 0;
+  overlay.style.zIndex = 2147483647;
+  overlay.style.pointerEvents = 'none';
+  onWindowResize();
+  overlayContext.clearRect( 0, 0, overlay.width, overlay.height );
+  overlayContext.fillStyle = 'rgba( 0, 0, 0, 0.7 )';
+  overlayContext.fillRect( 0, 0, overlay.width, overlay.height );
+}
+
+chrome[runtimeOrExtension].onMessage.addListener(
+    function(request, sender, sendResponse) {
+      if (request.message_type === "visual") {
+        visualize();
+      }
+    });
+
+

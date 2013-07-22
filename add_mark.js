@@ -10,8 +10,7 @@ var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ?
 
 var buttonListener =  function () {
   var titleVal = document.getElementById('title').value;
-  chrome[runtimeOrExtension].sendMessage({message_type:"pathmark", name:titleVal, url:url},
-      function() {});
+  chrome[runtimeOrExtension].sendMessage({message_type:"pathmark", name:titleVal, url:url});
   window.close();
 }
 
