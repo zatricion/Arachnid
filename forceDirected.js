@@ -31,7 +31,9 @@
     var link = svg.selectAll(".link")
       .data(force.links())
       .enter().append("line")
-      .attr("class", "link");
+      .attr("class", "link")
+      .style("stroke", "white")
+      .style("stroke-width", 3);
 
     var node = svg.selectAll(".node")
       .data(force.nodes())
@@ -42,7 +44,9 @@
       .call(force.drag);
 
     node.append("circle")
-      .attr("r", 8);
+      .attr("r", 8)
+      .style("stroke", "white")
+      .style("stroke-width", 2);
 
     node.append("text")
       .attr("x", 12)
