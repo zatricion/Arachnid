@@ -17,7 +17,6 @@ var pmarkByLink = function () {
 var startVisualization = function () {
 
   chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
-    console.log(tabs[0]);
     chrome.tabs.sendMessage(tabs[0].id, {message_type:"visual"});
   });
   window.close();

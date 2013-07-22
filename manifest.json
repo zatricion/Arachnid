@@ -14,7 +14,7 @@
   "content_scripts": [
   {
       "matches": ["http://*/*","https://*/*"],
-      "js": ["content.js"]
+      "js": ["content.js", "forceDirected.js", "d3.v3/d3.v3.min.js"]
     }
   ],
   "manifest_version": 2

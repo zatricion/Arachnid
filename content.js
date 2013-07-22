@@ -10,12 +10,24 @@ var REF = REF.substr(REF.indexOf(':') + 1);
 var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ?
                          'runtime' : 'extension';
 
-chrome[runtimeOrExtension].sendMessage({message_type:"node", referrer:REF, url:URL},
-    function() {});
+// Keeps track of visit history                         
+chrome[runtimeOrExtension].sendMessage({message_type:"node", referrer:REF, url:URL});
 
-
-
+//
 // Visualization
+//
+
+var getPathmark = function (name, links) {
+  chrome.storage.sync.get(null, function (pathmarks) {
+    for (elem in pathmarks[name]) { 
+      pathmarks[name][elem].forEach(function(thing, index) {
+        var thing2 = {source: thing.in_node, target: elem, time: thing.timestamp}; 
+        links.push(thing2);
+      }); 
+    }
+    plotPathmark(links);
+  });
+}
 
 var onWindowResize = function (event) {
   overlay.width = window.innerWidth;
@@ -35,6 +47,9 @@ var visualize = function () {
   overlayContext.clearRect( 0, 0, overlay.width, overlay.height );
   overlayContext.fillStyle = 'rgba( 0, 0, 0, 0.7 )';
   overlayContext.fillRect( 0, 0, overlay.width, overlay.height );
+
+  links = [];
+  getPathmark("Test", links);
 }
 
 chrome[runtimeOrExtension].onMessage.addListener(
