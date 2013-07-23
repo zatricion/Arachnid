@@ -8,15 +8,21 @@ var REF = REF.substr(REF.indexOf(':') + 1);
 
 var getFaviconAndSend = function (url, ref) {
   var favicon;
-  $.get(url, function (data) {
-    favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/;
-    stripRe = /([\w]+\.){1}([\w]+\.?)+/;
+  $.get(ref, function (data) {
+    var favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/;
+    var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
     favicon = favRe.exec(data);
     if (favicon && favicon[1] !== 'favicon.ico') {
-      favicon = favicon[1];
+      var httpCheck = /http:/;
+      if (httpCheck.test(favicon[1])) {
+        favicon = favicon[1];
+      }
+      else {
+        favicon = 'http:' + favicon[1];
+      }
     }
     else {
-      favicon = stripRe.exec(url)[0] + '/favicon.ico';
+      favicon = 'http://' + stripRe.exec(ref)[0] + '/favicon.ico';
     }
     send(ref, url, favicon);
   });
@@ -33,12 +39,7 @@ var send = function (referrer, url, favicon) {
 // Compatibility
 var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
 
-// Keeps track of visit history
-document.onreadystatechange = function () {
-  if (document.readyState == "complete") {
-    getFaviconAndSend(URL, REF);
-  }
-}
+getFaviconAndSend(URL, REF);
 
 
 //
@@ -50,7 +51,8 @@ var getPathmark = function (name, links) {
     for (elem in pathmarks[name]) { 
       pathmarks[name][elem].forEach(function(thing, index) {
         if (thing.in_node) {
-          var thing2 = {source: thing.in_node,
+          var thing2 = {
+            source: thing.in_node,
             target: elem,
             time: thing.timestamp, 
             favicon: thing.favicon}; 
@@ -98,6 +100,11 @@ chrome[runtimeOrExtension].onMessage.addListener(
     function(request, sender, sendResponse) {
       if (request.message_type === "visual") {
         visualize(request.name);
+      }
+      else if (request.message_type === "clear") {
+        if (window.confirm("Are you sure you would like to clear all Pathmarks?")) {
+          chrome.storage.sync.clear();
+        }
       }
     });
 

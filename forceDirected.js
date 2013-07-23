@@ -32,7 +32,7 @@
       .style("left", 0)
       .style("top", 0)
       .style("color", "white")
-      .style("font", "32px");
+      .style("font-size", "32px");
 
     var svg = d3.select("body").append("svg")
       .attr("width", width)
@@ -69,7 +69,15 @@
       .attr("id", function (d, i) {return "pattern-" + i;})
       .attr("width", 32)
       .attr("height", 32)
-      .attr("patternContentUnits", "objectBoundingBox")
+      .attr("patternContentUnits", "objectBoundingBox");
+
+    pattern
+      .append("rect")
+      .attr("fill", "white")
+      .attr("width", 1)
+      .attr("height", 1);
+
+    pattern
       .append("image")
       .attr("xlink:href", function (d) {return d.favicon})
       .attr("width", 1)

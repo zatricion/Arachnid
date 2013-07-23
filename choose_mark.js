@@ -21,7 +21,7 @@ var showPathmark = function (pathmark) {
   chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {message_type:"visual", name: pathmark});
   });
-  window.close();
+  //window.close();
 }
 
 document.addEventListener('DOMContentLoaded', main);

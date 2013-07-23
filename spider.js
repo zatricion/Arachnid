@@ -43,7 +43,12 @@ var buildMenu =  function (divName) {
     startVisualization(); 
   }, false);
 
-
+  // Clear Pathmarks
+  anchors[4].addEventListener('click', function () {
+    chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, {message_type:"clear"});
+    });
+  }, true);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
