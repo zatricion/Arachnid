@@ -49,11 +49,14 @@ var getPathmark = function (name, links) {
   chrome.storage.sync.get(null, function (pathmarks) {
     for (elem in pathmarks[name]) { 
       pathmarks[name][elem].forEach(function(thing, index) {
-        var thing2 = {source: thing.in_node,
-                      target: elem,
-                      time: thing.timestamp, 
-                      favicon: thing.favicon}; 
-        links.push(thing2);
+        if (thing.in_node) {
+          var thing2 = {source: thing.in_node,
+            target: elem,
+            time: thing.timestamp, 
+            favicon: thing.favicon}; 
+
+          links.push(thing2);
+        }
       }); 
     }
     plotPathmark(links);
