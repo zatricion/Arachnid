@@ -87,4 +87,8 @@ chrome[runtimeOrExtension].onMessage.addListener(
     else if (request.message_type === "pathmark") {
       createPathmark(request.url, request.name);
     }
+    else if (request.message_type === "newtab") {
+      chrome.tabs.create( {url: request.url,
+                          active: false});
+    }
  });
