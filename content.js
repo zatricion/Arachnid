@@ -72,7 +72,7 @@ var onWindowResize = function (event) {
   overlayContext.fillRect( 0, 0, overlay.width, overlay.height );
 }
 
-var visualize = function () {
+var visualize = function (pathmark) {
   overlay = document.createElement( 'canvas' );
   document.body.appendChild(overlay);
   overlayContext = overlay.getContext( '2d' );
@@ -82,6 +82,7 @@ var visualize = function () {
   overlay.style.zIndex = 111111111;
   onWindowResize();
 
+  // Remove Visualization on background click
   overlay.addEventListener('click', function () {
    d3.select('svg').remove();
    d3.select('canvas').remove();
@@ -90,13 +91,13 @@ var visualize = function () {
   // Resize canvas when window is resized
   window.addEventListener( 'resize', onWindowResize, false );
 
-  getPathmark("Test", []);
+  getPathmark(pathmark, []);
 }
 
 chrome[runtimeOrExtension].onMessage.addListener(
     function(request, sender, sendResponse) {
       if (request.message_type === "visual") {
-        visualize();
+        visualize(request.name);
       }
     });
 

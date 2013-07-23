@@ -15,11 +15,7 @@ var pmarkByLink = function () {
 }
 
 var startVisualization = function () {
-
-  chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {message_type:"visual"});
-  });
-  window.close();
+  window.location.replace("choose_mark.html");
 }
 
 var buildMenu =  function (divName) {
@@ -44,7 +40,7 @@ var buildMenu =  function (divName) {
 
   // Visualize Pathmarks
   anchors[3].addEventListener('click', function () {
-    startVisualization();
+    startVisualization(); 
   }, false);
 
 
