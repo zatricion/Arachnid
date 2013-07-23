@@ -59,6 +59,7 @@ var getPathmark = function (name, links) {
         }
       }); 
     }
+    // This calls D3 script
     plotPathmark(links);
   });
 }
@@ -78,14 +79,18 @@ var visualize = function () {
   overlay.style.position = 'fixed';
   overlay.style.left = 0;
   overlay.style.top = 0;
-  overlay.style.zIndex = 111111;
-  overlay.style.pointerEvents = 'none';
+  overlay.style.zIndex = 111111111;
   onWindowResize();
 
+  overlay.addEventListener('click', function () {
+   d3.select('svg').remove();
+   d3.select('canvas').remove();
+  }, false);
+
+  // Resize canvas when window is resized
   window.addEventListener( 'resize', onWindowResize, false );
 
-  links = [];
-  getPathmark("Test", links);
+  getPathmark("Test", []);
 }
 
 chrome[runtimeOrExtension].onMessage.addListener(
