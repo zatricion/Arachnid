@@ -85,15 +85,17 @@ var visualize = function (pathmark) {
   onWindowResize();
 
   // Remove Visualization on background click
-  overlay.addEventListener('click', function () {
-   d3.select('svg').remove();
-   d3.select('canvas').remove();
-  }, false);
+  overlay.addEventListener('click', function () {clearScreen();}, false);
 
   // Resize canvas when window is resized
   window.addEventListener( 'resize', onWindowResize, false );
 
   getPathmark(pathmark, []);
+}
+
+var clearScreen = function () {
+  d3.select('svg').remove();
+  d3.select('canvas').remove();
 }
 
 chrome[runtimeOrExtension].onMessage.addListener(
@@ -105,6 +107,9 @@ chrome[runtimeOrExtension].onMessage.addListener(
         if (window.confirm("Are you sure you would like to clear all Pathmarks?")) {
           chrome.storage.sync.clear();
         }
+      }
+      else if (request.message_type === "clear_screen") {
+        clearScreen();
       }
     });
 

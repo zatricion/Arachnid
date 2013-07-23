@@ -13,6 +13,8 @@ body {
 }
 
 .choice {
+  font-family: helvetica;
+  font-size: 14px;
   color: black;
   text-decoration: none;
   display: block;
@@ -28,3 +30,10 @@ body {
   background-color: #D9E9FA;
 }
 
+.divider {
+  height: 2px;
+  margin: 0px 0px;
+  overflow: hidden;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid #ffffff;
+}
