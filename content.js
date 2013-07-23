@@ -64,8 +64,11 @@ var getPathmark = function (name, links) {
 }
 
 var onWindowResize = function (event) {
+  overlayContext.clearRect( 0, 0, overlay.width, overlay.height );
   overlay.width = window.innerWidth;
   overlay.height = window.innerHeight;
+  overlayContext.fillStyle = 'rgba( 0, 0, 0, 0.7 )';
+  overlayContext.fillRect( 0, 0, overlay.width, overlay.height );
 }
 
 var visualize = function () {
@@ -78,9 +81,8 @@ var visualize = function () {
   overlay.style.zIndex = 111111;
   overlay.style.pointerEvents = 'none';
   onWindowResize();
-  overlayContext.clearRect( 0, 0, overlay.width, overlay.height );
-  overlayContext.fillStyle = 'rgba( 0, 0, 0, 0.7 )';
-  overlayContext.fillRect( 0, 0, overlay.width, overlay.height );
+
+  window.addEventListener( 'resize', onWindowResize, false );
 
   links = [];
   getPathmark("Test", links);
