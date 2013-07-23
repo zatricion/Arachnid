@@ -72,7 +72,7 @@ var visualize = function () {
   overlay.style.position = 'fixed';
   overlay.style.left = 0;
   overlay.style.top = 0;
-  overlay.style.zIndex = 0;
+  overlay.style.zIndex = 111111;
   overlay.style.pointerEvents = 'none';
   onWindowResize();
   overlayContext.clearRect( 0, 0, overlay.width, overlay.height );

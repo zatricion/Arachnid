@@ -11,8 +11,6 @@
           (nodes[link.target] = {name: link.target, favicon: link.favicon});
     });
 
-    console.log(nodes);
-
     var width = 960;
     var height = 500;
 
@@ -25,12 +23,24 @@
       .on("tick", tick)
       .start();
 
+    var tooltip = d3.select("body")
+      .append("div")
+      .style("position", "fixed")
+      .style("z-index", 111111221)
+      .style("visibility", "hidden")
+      .text("Current URL")
+      .style("left", 0)
+      .style("top", 0)
+      .style("color", "white")
+      .style("font", "32px");
+
     var svg = d3.select("body").append("svg")
       .attr("width", width)
       .attr("height", height)
       .style("left", 0)
       .style("top", 0)
-      .style("position", "fixed");
+      .style("position", "fixed")
+      .style("z-index", 111111222);
 
     var link = svg.selectAll(".link")
       .data(force.links())
@@ -66,11 +76,8 @@
       .attr("r", 16)
       .attr("fill", function (d, i) {return "url(#pattern-" + i + ")" })
       .style("stroke", "white")
-      .style("stroke-width", 2);
-
-    node.append("text")
-      .attr("x", 12)
-      .attr("dy", ".35em")
+      .style("stroke-width", 2)
+      .append("title")
       .text(function(d) { return d.name; });
 
     function tick() {
@@ -86,14 +93,17 @@
 
     function mouseover() {
       d3.select(this).select("circle").transition()
-        .duration(750)
+        .duration(100)
         .attr("r", 24);
+      tooltip.style("visibility", "visible");
+      tooltip.text(d3.select(this).select("circle").select("title").text());
     }
 
     function mouseout() {
       d3.select(this).select("circle").transition()
-        .duration(750)
+        .duration(300)
         .attr("r", 16);
+      tooltip.style("visibility", "hidden");
     }
 
   }
