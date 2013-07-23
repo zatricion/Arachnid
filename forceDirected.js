@@ -40,7 +40,8 @@
       .style("left", 0)
       .style("top", 0)
       .style("position", "fixed")
-      .style("z-index", 111111222);
+      .style("z-index", 111111112)
+      .style("pointer-events", "none");
 
     var link = svg.selectAll(".link")
       .data(force.links())
@@ -53,6 +54,7 @@
       .data(force.nodes())
       .enter().append("g")
       .attr("class", "node")
+      .style("pointer-events", "all")
       .on("mouseover", mouseover)
       .on("mouseout", mouseout)
       .on("click", click)
