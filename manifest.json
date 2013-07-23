@@ -1,21 +1,22 @@
 {
   "name": "Spider",
-  "version": "1.1",
-  "description": "Creates pathmarks.",
-  "permissions": ["history", "tabs", "webNavigation", "storage", "chrome://favicon/"],
-  "browser_action": {
-    "default_popup": "spider.html",
-    "default_icon": "spider.png"
-  },
-  "background": {
-    "scripts": ["daemon.js", "jquery-1.9.1.min.js"],
-    "persistent": true
-  },
-  "content_scripts": [
-  {
+    "version": "1.1",
+    "description": "Creates pathmarks.",
+    "permissions": ["history", "tabs", "webNavigation", "storage", "chrome://favicon/"],
+    "browser_action": {
+      "default_popup": "spider.html",
+      "default_icon": "spider.png"
+    },
+    "background": {
+      "scripts": ["daemon.js", "jquery-1.9.1.min.js"],
+      "persistent": true
+    },
+    "content_scripts": [
+    {
       "matches": ["http://*/*","https://*/*"],
-      "js": ["content.js", "forceDirected.js", "d3.v3/d3.v3.min.js"]
+      "js": ["d3.v3/d3.v3.min.js", "jquery-1.9.1.min.js",
+        "content.js", "forceDirected.js"]
     }
   ],
-  "manifest_version": 2
+    "manifest_version": 2
 }

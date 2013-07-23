@@ -6,13 +6,37 @@ var URL = URL.substr(URL.indexOf(':') + 1);
 var REF = document.referrer;
 var REF = REF.substr(REF.indexOf(':') + 1);
 
+var getFaviconAndSend = function (url, ref) {
+  var favicon;
+  $.get(url, function (data) {
+    favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/;
+    stripRe = /([\w]+\.){1}([\w]+\.?)+/;
+    favicon = favRe.exec(data);
+    if (favicon && favicon[1] !== 'favicon.ico') {
+      favicon = favicon[1];
+    }
+    else {
+      favicon = stripRe.exec(url)[0] + '/favicon.ico';
+    }
+    send(ref, url, favicon);
+  });
+}
+
+var send = function (referrer, url, favicon) {
+  chrome[runtimeOrExtension].sendMessage({
+    message_type: "node",
+    referrer: referrer,
+    url: url, 
+    favicon: favicon});
+}
+
 // Compatibility
 var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
 
 // Keeps track of visit history
 document.onreadystatechange = function () {
   if (document.readyState == "complete") {
-    chrome[runtimeOrExtension].sendMessage({message_type:"node", referrer:REF, url:URL});
+    getFaviconAndSend(URL, REF);
   }
 }
 
@@ -65,5 +89,4 @@ chrome[runtimeOrExtension].onMessage.addListener(
         visualize();
       }
     });
-
 
