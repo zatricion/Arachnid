@@ -55,6 +55,7 @@
       .attr("class", "node")
       .on("mouseover", mouseover)
       .on("mouseout", mouseout)
+      .on("click", click)
       .call(force.drag);
 
     var defs = svg.append("defs");
@@ -96,7 +97,7 @@
         .duration(100)
         .attr("r", 24);
       tooltip.style("visibility", "visible");
-      tooltip.text(d3.select(this).select("circle").select("title").text());
+      tooltip.text('http:' + d3.select(this).select("circle").select("title").text());
     }
 
     function mouseout() {
@@ -104,6 +105,19 @@
         .duration(300)
         .attr("r", 16);
       tooltip.style("visibility", "hidden");
+    }
+
+    function click() {
+      var url = tooltip.text();
+
+      // Compatibility
+      var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
+
+      chrome[runtimeOrExtension].sendMessage({
+        message_type: "newtab",
+        url: url
+      });
+
     }
 
   }
