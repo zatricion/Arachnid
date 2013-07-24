@@ -1,11 +1,16 @@
 {
-  "name": "Spider",
+  "name": "Pathmarks",
     "version": "1.1",
     "description": "Creates pathmarks.",
+    "icons": {
+      "16": "pathmark16.png",
+      "48": "pathmark48.png",
+      "128": "pathmark128.png"
+    },
     "permissions": ["history", "tabs", "webNavigation", "storage", "chrome://favicon/"],
     "browser_action": {
       "default_popup": "spider.html",
-      "default_icon": "spider.png"
+      "default_icon": "pathmark48.png"
     },
     "background": {
       "scripts": ["daemon.js", "jquery-1.9.1.min.js"],
