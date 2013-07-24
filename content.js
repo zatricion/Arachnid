@@ -25,24 +25,37 @@ send(REF, URL);
 
 var getFavicon = function (url, callback) {
   var favicon;
-  return $.get(url, function (data) {
-    var favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/;
-    var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
-    favicon = favRe.exec(data);
-    if (favicon && favicon[1] !== 'favicon.ico') {
-      var httpCheck = /http/;
-      if (httpCheck.test(favicon[1])) {
-        favicon = favicon[1];
-      }
-      else {
-        favicon = 'http:' + favicon[1];
-      }
-    }
-    else {
-      favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
-    }
-    callback(url, favicon);
-  });
+  var favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/;
+  var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
+
+  var dfd = $.Deferred();
+  
+  $.get(url)
+    .success(
+        function (data) {
+
+          favicon = favRe.exec(data);
+          if (favicon && favicon[1] !== 'favicon.ico') {
+            var httpCheck = /http/;
+            if (httpCheck.test(favicon[1])) {
+              favicon = favicon[1];
+            } else {
+              favicon = 'http:' + favicon[1];
+            }
+          } else {
+            favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
+          }
+          callback(url, favicon);
+          dfd.resolve();
+        })
+  .error(
+      function () {
+        favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
+        callback(url, favicon);
+        dfd.resolve();
+      });
+
+  return dfd.promise();
 }
 
 var getPathmark = function (name, links) {
