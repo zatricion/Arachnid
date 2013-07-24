@@ -27,33 +27,54 @@ var getFavicon = function (url, callback) {
   var favicon;
   var favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/;
   var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
-
+  var httpCheck = /http/;
   var dfd = $.Deferred();
-  
-  $.get(url)
-    .success(
-        function (data) {
 
-          favicon = favRe.exec(data);
-          if (favicon && favicon[1] !== 'favicon.ico') {
-            var httpCheck = /http/;
-            if (httpCheck.test(favicon[1])) {
-              favicon = favicon[1];
-            } else {
-              favicon = 'http:' + favicon[1];
-            }
-          } else {
-            favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
-          }
-          callback(url, favicon);
-          dfd.resolve();
-        })
-  .error(
-      function () {
-        favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
-        callback(url, favicon);
-        dfd.resolve();
-      });
+  // Try to get favicon from cache, otherwise find it, then cache it
+  chrome.storage.sync.get("favicons", function (favCache) {
+    favCache.favicons = favCache.favicons || {};
+    if (favCache.favicons[url]) {
+      favicon = favCache.favicons[url];
+      callback(url, favicon);
+      dfd.resolve();
+    } else {
+      $.get(url)
+          .success(
+              function (data) {
+
+                favicon = favRe.exec(data);
+                if (favicon && favicon[1] !== 'favicon.ico') {
+                  if (httpCheck.test(favicon[1])) {
+                    favicon = favicon[1];
+                  } else {
+                    favicon = 'http:' + favicon[1];
+                  }
+                } else {
+                  favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
+                }
+
+                // Cache favicon
+                favCache.favicons[url] = favicon;
+                chrome.storage.sync.set(favCache);
+                
+                callback(url, favicon);
+                dfd.resolve();
+              })
+        .error(
+            function () {
+              favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
+
+              // Cache favicon
+              favCache.favicons[url] = favicon;
+              chrome.storage.sync.set(favCache);
+
+              callback(url, favicon);
+              dfd.resolve();
+            });
+    }
+  });
+  
+
 
   return dfd.promise();
 }
