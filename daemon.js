@@ -7,10 +7,9 @@ var pmarks = chrome.storage.sync;
 nodes.clear();
 console.log("Cleared local storage");
 
-var createNode = function (url, referrer, favicon) {
+var createNode = function (url, referrer) {
   var edge = {
     in_node: referrer,
-    favicon: favicon,
     timestamp: Date()
   };
 
@@ -82,7 +81,7 @@ var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ?
 chrome[runtimeOrExtension].onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.message_type === "node") {
-      createNode(request.url, request.referrer, request.favicon);
+      createNode(request.url, request.referrer);
     }
     else if (request.message_type === "pathmark") {
       createPathmark(request.url, request.name);

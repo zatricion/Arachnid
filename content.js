@@ -1,4 +1,6 @@
 ;
+// Compatibility
+var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
 
 var URL = document.URL;
 var URL = URL.substr(URL.indexOf(':') + 1);
@@ -6,14 +8,29 @@ var URL = URL.substr(URL.indexOf(':') + 1);
 var REF = document.referrer;
 var REF = REF.substr(REF.indexOf(':') + 1);
 
-var getFaviconAndSend = function (url, ref) {
+var send = function (referrer, url) {
+  chrome[runtimeOrExtension].sendMessage({
+    message_type: "node",
+    referrer: referrer,
+    url: url 
+  });
+}
+
+// Add node to graph
+send(REF, URL);
+
+//
+// Visualization
+//
+
+var getFavicon = function (url, callback) {
   var favicon;
-  $.get(ref, function (data) {
+  $.get(url, function (data) {
     var favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/;
     var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
     favicon = favRe.exec(data);
     if (favicon && favicon[1] !== 'favicon.ico') {
-      var httpCheck = /http:/;
+      var httpCheck = /http/;
       if (httpCheck.test(favicon[1])) {
         favicon = favicon[1];
       }
@@ -22,29 +39,11 @@ var getFaviconAndSend = function (url, ref) {
       }
     }
     else {
-      favicon = 'http://' + stripRe.exec(ref)[0] + '/favicon.ico';
+      favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
     }
-    send(ref, url, favicon);
+    callback(favicon);
   });
 }
-
-var send = function (referrer, url, favicon) {
-  chrome[runtimeOrExtension].sendMessage({
-    message_type: "node",
-    referrer: referrer,
-    url: url, 
-    favicon: favicon});
-}
-
-// Compatibility
-var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
-
-getFaviconAndSend(URL, REF);
-
-
-//
-// Visualization
-//
 
 var getPathmark = function (name, links) {
   chrome.storage.sync.get(null, function (pathmarks) {
@@ -54,15 +53,14 @@ var getPathmark = function (name, links) {
           var thing2 = {
             source: thing.in_node,
             target: elem,
-            time: thing.timestamp, 
-            favicon: thing.favicon}; 
+            time: thing.timestamp
+          }; 
 
           links.push(thing2);
         }
       }); 
     }
-    // This calls D3 script
-    plotPathmark(links);
+    getNodes(links);
   });
 }
 
@@ -97,6 +95,26 @@ var clearScreen = function () {
   d3.select('svg').remove();
   d3.select('canvas').remove();
 }
+
+// Compute the distinct nodes from the links.
+var getNodes = function (links) {
+  var nodes = {};
+  links.forEach(function(link) {
+    console.log(link.source);
+    getFavicon(link.source, function (favicon) {
+      link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, favicon: favicon});
+    });
+    getFavicon(link.target, function (favicon) {
+      link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, favicon: favicon});
+    });
+  });
+
+  // Call D3 script
+  console.log(links);
+  console.log(nodes);
+  plotPathmark(links, nodes);
+}
+
 
 chrome[runtimeOrExtension].onMessage.addListener(
     function(request, sender, sendResponse) {

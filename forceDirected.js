@@ -1,16 +1,8 @@
 ;
 (function () {
-  plotPathmark = function (links) {
-    var nodes = {};
-
-    // Compute the distinct nodes from the links.
-    links.forEach(function(link) {
-      link.source = nodes[link.source] || 
-          (nodes[link.source] = {name: link.source, favicon: link.favicon});
-      link.target = nodes[link.target] || 
-          (nodes[link.target] = {name: link.target, favicon: link.favicon});
-    });
-
+  plotPathmark = function (links, nodes) {  
+    console.log(nodes);
+    console.log(d3.values(nodes));
     var width = 960;
     var height = 500;
 
