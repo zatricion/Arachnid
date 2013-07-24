@@ -13,7 +13,7 @@
       "default_icon": "pathmark48.png"
     },
     "background": {
-      "scripts": ["daemon.js", "jquery-1.9.1.min.js"],
+      "scripts": ["jquery-1.9.1.min.js", "daemon.js"],
       "persistent": true
     },
     "content_scripts": [
