@@ -25,7 +25,7 @@ send(REF, URL);
 
 var getFavicon = function (url, callback) {
   var favicon;
-  var favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/;
+  var favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/i;
   var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
   var httpCheck = /http/;
   var dfd = $.Deferred();
