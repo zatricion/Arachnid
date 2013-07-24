@@ -4,18 +4,20 @@ var main = function () {
 
   chrome.storage.sync.get(null, function (pathmarks) {
     for (name in pathmarks) {
-      var a = document.createElement('a');
-      var linkText = document.createTextNode(name);
-      a.appendChild(linkText);
-      a.href = "#";
-      a.className = "choice";
-      a.addEventListener('click', function (event) {
-        showPathmark(this.text);
-      });
-      menu.appendChild(a);
-      var d = document.createElement('li');
-      d.className = "divider";
-      menu.appendChild(d);
+      if (name !== "favicons") {
+        var a = document.createElement('a');
+        var linkText = document.createTextNode(name);
+        a.appendChild(linkText);
+        a.href = "#";
+        a.className = "choice";
+        a.addEventListener('click', function (event) {
+          showPathmark(this.text);
+        });
+        menu.appendChild(a);
+        var d = document.createElement('li');
+        d.className = "divider";
+        menu.appendChild(d);
+      }
     }
   });
 }
