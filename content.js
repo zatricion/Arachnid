@@ -25,7 +25,7 @@ send(REF, URL);
 
 var getFavicon = function (url, callback) {
   var favicon;
-  $.get(url, function (data) {
+  return $.get(url, function (data) {
     var favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/;
     var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
     favicon = favRe.exec(data);
@@ -41,7 +41,7 @@ var getFavicon = function (url, callback) {
     else {
       favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
     }
-    callback(favicon);
+    callback(url, favicon);
   });
 }
 
@@ -100,19 +100,24 @@ var clearScreen = function () {
 var getNodes = function (links) {
   var nodes = {};
   links.forEach(function(link) {
-    console.log(link.source);
-    getFavicon(link.source, function (favicon) {
-      link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, favicon: favicon});
-    });
-    getFavicon(link.target, function (favicon) {
-      link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, favicon: favicon});
-    });
+    link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+    link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
   });
 
-  // Call D3 script
-  console.log(links);
-  console.log(nodes);
-  plotPathmark(links, nodes);
+  urlArr = Object.keys(nodes);
+
+  var deferred = [];
+  for (var i = 0; i < urlArr.length; i++) {
+    // Get all favicons before drawing visualization
+    deferred.push(
+        getFavicon(urlArr[i], function (url, favicon) {
+          nodes[url].favicon = favicon;}));
+  }
+  $.when.apply($, deferred).then(function () {
+    // Call D3 script
+    console.log(nodes);
+    plotPathmark(links, nodes);
+  });
 }
 
 

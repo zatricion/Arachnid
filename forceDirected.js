@@ -1,7 +1,6 @@
 ;
 (function () {
   plotPathmark = function (links, nodes) {  
-    console.log(nodes);
     console.log(d3.values(nodes));
     var width = 960;
     var height = 500;
