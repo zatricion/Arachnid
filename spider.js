@@ -3,14 +3,15 @@ chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
 });
 
 // Get active tab url and save pathmark to sync storage
-var pmarkByLink = function () {
+var addMark = function (option) {
   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
     var title = tabs[0].title;
     var url = tabs[0].url;
     var stripped = url.substr(url.indexOf(':') + 1);
     var info = {
       title: title,
-      url: stripped
+      url: stripped,
+      opt: option
     }
     // Changes popup html and sends title and url
     window.location.replace("add_mark.html#" + JSON.stringify(info));
@@ -27,17 +28,17 @@ var buildMenu =  function (divName) {
   
   // Links (right now the choices are all the same)
   anchors[0].addEventListener('click', function () {
-    pmarkByLink();
+    addMark("links");
   }, false);
 
-  // Time Slice
+  // Recent Tabs
   anchors[1].addEventListener('click', function () {
-    pmarkByLink();
+    addMark("recents");
   }, false);
 
   // Both
   anchors[2].addEventListener('click', function () {
-    pmarkByLink();
+    addMark("both");
   }, false);
 
 

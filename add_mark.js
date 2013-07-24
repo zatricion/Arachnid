@@ -3,6 +3,7 @@ var obj = JSON.parse(window.location.hash.substr(1));
 
 var title = obj.title;
 var url = obj.url;
+var opt = obj.opt;
 
 // Compatibility
 var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ?
@@ -10,7 +11,11 @@ var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ?
 
 var buttonListener =  function () {
   var titleVal = document.getElementById('title').value;
-  chrome[runtimeOrExtension].sendMessage({message_type:"pathmark", name:titleVal, url:url});
+  chrome[runtimeOrExtension].sendMessage({
+    message_type: "pathmark", 
+    name: titleVal, 
+    url: url,
+    opt: opt });
   window.close();
 }
 

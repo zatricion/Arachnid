@@ -34,10 +34,6 @@ var createNode = function (url, referrer) {
   });
 }
 
-
-// TODO: Implement user interface and let user save pathmark as something -
-// that thing is then the key to a storage.sync object which contains the pathmark
-
 var handleReferrers = function(referrers, output, callback) {
   if (referrers.length > 0) {
     savePath(referrers[0].in_node, output, function(newOutput) {
@@ -63,12 +59,45 @@ var savePath = function(url, output, callback) {
   });
 };
 
-var createPathmark = function (stripped, title) {
-  savePath(stripped, {}, function (output) {
+var saveAll = function (title) {
+  nodes.get(null, function (refObj) {
+    var pathmark = {};
+    pathmark[title] = refObj;
+    pmarks.set(pathmark);
+  });
+}
+
+saveRecents = function (title, minutes) {
+  chrome.storage.local.get(null, function (refObj) {
+    var output = {};
+    cutoffTime = Date.now() - (1000 * 60 * minutes);
+    for (item in refObj) {
+      refObj[item].forEach(function (edge) {
+        time = new Date(edge.timestamp).getTime();
+        if (time > cutoffTime) {
+          output[item] = output[item] || [];
+          output[item].push(edge);
+        }});
+    }
     var pathmark = {};
     pathmark[title] = output;
     pmarks.set(pathmark);
   });
+}
+
+var createPathmark = function (stripped, title, option) {
+  if (option === "links") {
+    savePath(stripped, {}, function (output) {
+      var pathmark = {};
+      pathmark[title] = output;
+      pmarks.set(pathmark);
+    });
+  } else if (option === "recents") {
+    // Ten Minutes Ago is "recent", but allow specify in options page
+    saveRecents(title, 10);
+  } else if (option === "both") {
+    saveAll(title);
+  }
 }
 
 //           //
@@ -84,7 +113,7 @@ chrome[runtimeOrExtension].onMessage.addListener(
       createNode(request.url, request.referrer);
     }
     else if (request.message_type === "pathmark") {
-      createPathmark(request.url, request.name);
+      createPathmark(request.url, request.name, request.opt);
     }
     else if (request.message_type === "newtab") {
       chrome.tabs.create( {url: request.url,

@@ -96,7 +96,7 @@
 
     function mouseover() {
       d3.select(this).select("circle").transition()
-        .duration(100)
+        .duration(1)
         .attr("r", 24);
       tooltip.style("visibility", "visible");
       tooltip.text('http:' + d3.select(this).select("circle").select("title").text());
