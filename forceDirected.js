@@ -17,6 +17,7 @@
     var tooltip = d3.select("body")
       .append("div")
       .style("position", "fixed")
+      .style("white-space", "nowrap")
       .style("z-index", 111111221)
       .style("visibility", "hidden")
       .text("Current URL")
