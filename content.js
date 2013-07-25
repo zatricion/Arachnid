@@ -46,7 +46,7 @@ var getFavicon = function (url, callback) {
                 check = favCheck.exec(favicon);
                 if (check && !check[1]) {
                   favicon = domain + '/favicon.ico';
-                } else if (/^\//.test(favicon)) {
+                } else if (/^(\/|\.)/.test(favicon)) {
                     favicon = domain + favicon;
                 }
               } else {
