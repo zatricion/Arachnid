@@ -25,9 +25,9 @@ send(REF, URL);
 
 var getFavicon = function (url, callback) {
   var favicon;
-  var favRe = /(?:rel="shortcut icon"|rel="icon").*href="(.*\.(ico|png|gif|jpg|jpeg)?)"/i;
   var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
-  var httpCheck = /http/;
+  var favCheck = /(?:https?:)?(?:\/*)(.*?)(?:\/*)favicon.ico/;
+  var domain = 'http://' + stripRe.exec(url)[0];
   var dfd = $.Deferred();
 
   // Try to get favicon from cache, otherwise find it, then cache it
@@ -40,29 +40,29 @@ var getFavicon = function (url, callback) {
     } else {
       $.get(url)
           .success(
-              function (data) {
-
-                favicon = favRe.exec(data);
-                if (favicon && favicon[1] !== 'favicon.ico') {
-                  if (httpCheck.test(favicon[1])) {
-                    favicon = favicon[1];
-                  } else {
-                    favicon = 'http:' + favicon[1];
-                  }
-                } else {
-                  favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
+            function (data) {
+              favicon =  $("<div>").html(data).find('link[rel*="icon"]').attr("href");
+              if (favicon) {
+                check = favCheck.exec(favicon);
+                if (check && !check[1]) {
+                  favicon = domain + '/favicon.ico';
+                } else if (/^\//.test(favicon)) {
+                    favicon = domain + favicon;
                 }
+              } else {
+                  favicon = domain + '/favicon.ico';
+              } 
 
-                // Cache favicon
-                favCache.favicons[url] = favicon;
-                chrome.storage.sync.set(favCache);
-                
-                callback(url, favicon);
-                dfd.resolve();
+              // Cache favicon
+              favCache.favicons[url] = favicon;
+              chrome.storage.sync.set(favCache);
+              
+              callback(url, favicon);
+              dfd.resolve();
               })
         .error(
             function () {
-              favicon = 'http://' + stripRe.exec(url)[0] + '/favicon.ico';
+              favicon = domain + '/favicon.ico';
 
               // Cache favicon
               favCache.favicons[url] = favicon;
