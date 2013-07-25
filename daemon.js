@@ -59,11 +59,24 @@ var savePath = function(url, output, callback) {
   });
 };
 
-var saveAll = function (title) {
+var saveAll = function (index, title) {
+  var indLst = [];
   nodes.get(null, function (refObj) {
-    var pathmark = {};
-    pathmark[title] = refObj;
+    for (item in refObj) {
+      indLst.push(index);
+      var mark = {};
+      var edge = {};
+      edge[item] = refObj[item];
+      mark[index] = edge;
+      pmarks.set(mark);
+      index++;
+    }
+    var pathmark = {}
+
+    // Attach correct list of indices to pathmark
+    pathmark[title] = indLst;
     pmarks.set(pathmark);
+    setInd(index);
   });
 }
 
@@ -85,18 +98,33 @@ saveRecents = function (title, minutes) {
   });
 }
 
-var createPathmark = function (stripped, title, option) {
+// Gets the current index from sync storage
+var getInd = function () {
+  dfd = $.Deferred();
+  chrome.storage.sync.get("index", function (indObj) {
+    var index = indObj["index"] || 0;
+    dfd.resolve(index);
+  });
+  return dfd.promise();
+}
+
+// Sets the current index
+var setInd = function (num) {
+  chrome.storage.sync.set({"index": num});
+}
+
+var createPathmark = function (index, stripped, title, option) {
   if (option === "links") {
-    savePath(stripped, {}, function (output) {
+    savePath(index, stripped, {}, function (output) {
       var pathmark = {};
       pathmark[title] = output;
       pmarks.set(pathmark);
     });
   } else if (option === "recents") {
     // Ten Minutes Ago is "recent", but allow specify in options page
-    saveRecents(title, 10);
+    saveRecents(index, title, 10);
   } else if (option === "both") {
-    saveAll(title);
+    saveAll(index, title);
   }
 }
 
@@ -113,7 +141,9 @@ chrome[runtimeOrExtension].onMessage.addListener(
       createNode(request.url, request.referrer);
     }
     else if (request.message_type === "pathmark") {
-      createPathmark(request.url, request.name, request.opt);
+      getInd().done(function (index) {
+        createPathmark(index, request.url, request.name, request.opt);
+      });
     }
     else if (request.message_type === "newtab") {
       chrome.tabs.create( {url: request.url,

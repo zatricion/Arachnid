@@ -81,21 +81,24 @@ var getFavicon = function (url, callback) {
 
 var getPathmark = function (name, links) {
   chrome.storage.sync.get(null, function (pathmarks) {
-    for (elem in pathmarks[name]) { 
-      pathmarks[name][elem].forEach(function(thing, index) {
-        if (thing.in_node) {
-          var thing2 = {
-            source: thing.in_node,
-            target: elem,
-            time: thing.timestamp
-          }; 
+    pathmarks[name].forEach(function (markInd) {
+      for (item in pathmarks[markInd]) {
+        pathmarks[markInd][item].forEach(function (thing) {
+          if (thing.in_node) {
+            var thing2 = {
+              source: thing.in_node,
+              target: item,
+              time: thing.timestamp
+            }; 
 
-          links.push(thing2);
-        }
-      }); 
-    }
-    getNodes(links);
+            links.push(thing2);
+          }
+        });
+      }
+    }); 
   });
+  console.log(links);
+  getNodes(links);
 }
 
 var onWindowResize = function (event) {
