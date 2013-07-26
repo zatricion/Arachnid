@@ -27,6 +27,7 @@ var getFavicon = function (url, callback) {
   var favicon;
   var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
   var favCheck = /(?:https?:)?(?:\/*)(.*?)(?:\/*)favicon.ico/;
+  var urlCheck = /^(\/|\.)(?!\/)/;
   var domain = 'http://' + stripRe.exec(url)[0];
   var dfd = $.Deferred();
 
@@ -46,7 +47,7 @@ var getFavicon = function (url, callback) {
                 check = favCheck.exec(favicon);
                 if (check && !check[1]) {
                   favicon = domain + '/favicon.ico';
-                } else if (/^(\/|\.)/.test(favicon)) {
+                } else if (urlCheck.test(favicon)) {
                     favicon = domain + favicon;
                 }
               } else {
