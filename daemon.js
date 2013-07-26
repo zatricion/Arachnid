@@ -59,28 +59,7 @@ var savePath = function(url, output, callback) {
   });
 };
 
-var saveAll = function (index, title) {
-  var indLst = [];
-  nodes.get(null, function (refObj) {
-    for (item in refObj) {
-      indLst.push(index);
-      var mark = {};
-      var edge = {};
-      edge[item] = refObj[item];
-      mark[index] = edge;
-      pmarks.set(mark);
-      index++;
-    }
-    var pathmark = {}
-
-    // Attach correct list of indices to pathmark
-    pathmark[title] = indLst;
-    pmarks.set(pathmark);
-    setInd(index);
-  });
-}
-
-saveRecents = function (title, minutes) {
+saveRecents = function (minutes, callback) {
   chrome.storage.local.get(null, function (refObj) {
     var output = {};
     cutoffTime = Date.now() - (1000 * 60 * minutes);
@@ -92,9 +71,7 @@ saveRecents = function (title, minutes) {
           output[item].push(edge);
         }});
     }
-    var pathmark = {};
-    pathmark[title] = output;
-    pmarks.set(pathmark);
+    callback(output);
   });
 }
 
@@ -113,18 +90,34 @@ var setInd = function (num) {
   chrome.storage.sync.set({"index": num});
 }
 
+// Given an object for a pathmark, sets the mark in sync storage
+var setMark = function (refObj, index, title) {
+  var indLst = [];
+  for (item in refObj) {
+    indLst.push(index);
+    var mark = {};
+    var edge = {};
+    edge[item] = refObj[item];
+    mark[index] = edge;
+    pmarks.set(mark);
+    index++;
+  }
+  var pathmark = {}
+
+  // Attach correct list of indices to pathmark
+  pathmark[title] = indLst;
+  pmarks.set(pathmark);
+  setInd(index);
+}
+
 var createPathmark = function (index, stripped, title, option) {
   if (option === "links") {
-    savePath(index, stripped, {}, function (output) {
-      var pathmark = {};
-      pathmark[title] = output;
-      pmarks.set(pathmark);
-    });
+    savePath(stripped, {}, function (output) { setMark(output, index, title); });
   } else if (option === "recents") {
     // Ten Minutes Ago is "recent", but allow specify in options page
-    saveRecents(index, title, 10);
+    saveRecents(10, function (output) { setMark(output, index, title); });
   } else if (option === "both") {
-    saveAll(index, title);
+    nodes.get(null, function (output) { setMark(output, index, title); });
   }
 }
 
