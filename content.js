@@ -74,8 +74,6 @@ var getFavicon = function (url, callback) {
     }
   });
   
-
-
   return dfd.promise();
 }
 
@@ -95,10 +93,10 @@ var getPathmark = function (name, links) {
           }
         });
       }
-    }); 
-  });
-  console.log(links);
+    });
+
   getNodes(links);
+  });
 }
 
 var onWindowResize = function (event) {
@@ -141,8 +139,9 @@ var getNodes = function (links) {
     link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
   });
 
+  console.log(nodes);
   urlArr = Object.keys(nodes);
-
+  console.log(urlArr);
   var deferred = [];
   for (var i = 0; i < urlArr.length; i++) {
     // Get all favicons before drawing visualization
