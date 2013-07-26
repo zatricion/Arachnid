@@ -102,10 +102,13 @@ var getPathmark = function (name, links) {
 
 var onWindowResize = function (event) {
   overlayContext.clearRect( 0, 0, overlay.width, overlay.height );
-  overlay.width = window.innerWidth;
-  overlay.height = window.innerHeight;
+  width = window.innerWidth;
+  height = window.innerHeight;
+  overlay.width = width;
+  overlay.height = height;
   overlayContext.fillStyle = 'rgba( 0, 0, 0, 0.7 )';
   overlayContext.fillRect( 0, 0, overlay.width, overlay.height );
+  d3.select('svg').attr("width", width).attr("height", height);
 }
 
 var visualize = function (pathmark) {
@@ -153,7 +156,7 @@ var getNodes = function (links) {
   $.when.apply($, deferred).then(function () {
     // Call D3 script
     console.log(nodes);
-    plotPathmark(links, nodes);
+    plotPathmark(links, nodes, window.innerWidth, window.innerHeight);
   });
 }
 
