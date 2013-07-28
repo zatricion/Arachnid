@@ -121,6 +121,15 @@ var createPathmark = function (index, stripped, title, option) {
   }
 }
 
+var removePathmark = function (name) {
+  pmarks.get(name, function (pmark) {
+    pmark[name].forEach(function (item) {
+      pmarks.remove(item.toString());
+    });
+    pmarks.remove(name);
+  });
+}
+
 //           //
 // LISTENERS //
 //           //
@@ -141,5 +150,8 @@ chrome[runtimeOrExtension].onMessage.addListener(
     else if (request.message_type === "newtab") {
       chrome.tabs.create( {url: request.url,
                           active: false});
+    }
+    else if (request.message_type === "remove") {
+      removePathmark(request.mark);
     }
  });

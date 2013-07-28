@@ -12,6 +12,10 @@ body {
   background-color: white;
 }
 
+#menu:hover .edit {
+  background-color: white;
+}
+
 .choice {
   font-family: helvetica;
   font-size: 14px;
@@ -29,6 +33,25 @@ body {
   outline: none;
   background-color: #D9E9FA;
 }
+
+.edit {
+  font-family: helvetica;
+  font-size: 14px;
+  color: black;
+  text-decoration: none;
+  display: block;
+  padding-bottom: 3px;
+}
+
+.edit:hover {
+  background-color: #FAD9DB!important;
+}
+
+.edit:focus {
+  outline: none;
+  background-color: #FAD9DB;
+}
+
 
 .divider {
   height: 2px;
