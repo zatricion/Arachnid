@@ -40,6 +40,7 @@ var removePathmark = function (name) {
 
 var editPathmarks = function (event) {
   event.target.textContent = "Click on a pathmark to remove it";
+  event.target.onclick = backToVis;
   var pathmarks = document.querySelectorAll('a.choice');
   for (mark in pathmarks) {
     if (pathmarks.hasOwnProperty(mark)) {
@@ -49,6 +50,18 @@ var editPathmarks = function (event) {
         removePathmark(this.text);
       };
       pathmarks[mark].className = "edit";
+    }
+  }
+}
+
+var backToVis = function (event) {
+  event.target.textContent = "Edit Pathmarks";
+  event.target.onclick = editPathmarks;
+  var pathmarks = document.querySelectorAll('a.edit');
+  for (mark in pathmarks) {
+    if (pathmarks.hasOwnProperty(mark) && (pathmarks[mark] !== event.target)) {
+      pathmarks[mark].onclick = function (event) { showPathmark(this.text) };
+      pathmarks[mark].className = "choice";
     }
   }
 }
