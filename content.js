@@ -122,7 +122,7 @@ var visualize = function (pathmark) {
   onWindowResize();
 
   // Remove Visualization on background click
-  overlay.addEventListener('click', function () {clearScreen();}, false);
+  overlay.addEventListener('click', clearScreen, false);
 
   // Resize canvas when window is resized
   window.addEventListener( 'resize', onWindowResize, false );
@@ -160,6 +160,12 @@ var getNodes = function (links) {
   });
 }
 
+// Esc key clears the screen
+document.addEventListener("keydown", function(e) {
+  if (e.keyCode === 27) {
+    clearScreen();
+  }
+});
 
 chrome[runtimeOrExtension].onMessage.addListener(
     function(request, sender, sendResponse) {
