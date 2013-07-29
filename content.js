@@ -5,9 +5,6 @@ var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime
 var URL = document.URL;
 var URL = URL.substr(URL.indexOf(':') + 1);
 
-var REF = document.referrer;
-var REF = REF.substr(REF.indexOf(':') + 1);
-
 var send = function (referrer, url) {
   chrome[runtimeOrExtension].sendMessage({
     message_type: "node",
@@ -17,7 +14,10 @@ var send = function (referrer, url) {
 }
 
 // Add node to graph
-send(REF, URL);
+chrome.storage.local.get("REF", function (data) {
+  send(data.REF, URL);
+  chrome.storage.local.set({REF: ""});
+});
 
 //
 // Visualization
@@ -143,7 +143,6 @@ var getNodes = function (links) {
     link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
   });
 
-  console.log(nodes);
   urlArr = Object.keys(nodes);
   console.log(urlArr);
   var deferred = [];
@@ -186,6 +185,9 @@ chrome[runtimeOrExtension].onMessage.addListener(
           key = "Cmd-";
         }
         alert("You haven't created a path yet. Try browsing some more. \n\nYou can bookmark this page by hitting " + key + "D");
+      }
+      else if (request.message_type === "save_ref") {
+        chrome.storage.local.set({REF: URL});
       }
     });
 

@@ -7,6 +7,9 @@ var pmarks = chrome.storage.sync;
 nodes.clear();
 console.log("Cleared local storage");
 
+// Set default referrer
+nodes.set({REF: ""});
+
 var createNode = function (url, referrer) {
   var edge = {
     in_node: referrer,
@@ -112,7 +115,7 @@ var setMark = function (refObj, index, title) {
 
 var createPathmark = function (index, stripped, title, option) {
   if (option === "links") {
-    savePath(stripped, {}, function (output) { 
+    savePath(stripped, {}, function (output) {
       if (checkPathmark(output)) {
         setMark(output, index, title); 
       }
@@ -131,20 +134,24 @@ var createPathmark = function (index, stripped, title, option) {
       }
     });
   }
+  nodes.set({REF: ""});
 }
 
 var checkPathmark = function (pathmark) {
+  var result = false;
   for (edge in pathmark) {
     pathmark[edge].forEach(function (data) {
       if (data.in_node) {
-        return true;
+         result = true;
       }
     });
   }
-  chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {message_type: "bookmark_alert"});
-  });
-  return false;
+  if (!result) {
+    chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, {message_type: "bookmark_alert"});
+    });
+  }
+  return result;
 }
 
 var removePathmark = function (name) {
@@ -170,7 +177,9 @@ chrome[runtimeOrExtension].onMessage.addListener(
     }
     else if (request.message_type === "pathmark") {
       getInd().done(function (index) {
-        createPathmark(index, request.url, request.name, request.opt);
+        nodes.remove("REF", function () {
+          createPathmark(index, request.url, request.name, request.opt);
+        });
       });
     }
     else if (request.message_type === "newtab") {
@@ -181,3 +190,10 @@ chrome[runtimeOrExtension].onMessage.addListener(
       removePathmark(request.mark);
     }
  });
+
+// Send referree to content script 
+chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
+  chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {message_type: "save_ref"});
+  });
+});
