@@ -112,13 +112,39 @@ var setMark = function (refObj, index, title) {
 
 var createPathmark = function (index, stripped, title, option) {
   if (option === "links") {
-    savePath(stripped, {}, function (output) { setMark(output, index, title); });
+    savePath(stripped, {}, function (output) { 
+      if (checkPathmark(output)) {
+        setMark(output, index, title); 
+      }
+    });
   } else if (option === "recents") {
     // Ten Minutes Ago is "recent", but allow specify in options page
-    saveRecents(10, function (output) { setMark(output, index, title); });
+    saveRecents(10, function (output) { 
+      if (checkPathmark(output)) {
+        setMark(output, index, title); 
+      }
+    });
   } else if (option === "both") {
-    nodes.get(null, function (output) { setMark(output, index, title); });
+    nodes.get(null, function (output) { 
+      if (checkPathmark(output)) {
+        setMark(output, index, title);
+      }
+    });
   }
+}
+
+var checkPathmark = function (pathmark) {
+  for (edge in pathmark) {
+    pathmark[edge].forEach(function (data) {
+      if (data.in_node) {
+        return true;
+      }
+    });
+  }
+  chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {message_type: "bookmark_alert"});
+  });
+  return false;
 }
 
 var removePathmark = function (name) {

@@ -1,5 +1,5 @@
 chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
-  chrome.tabs.sendMessage(tabs[0].id, {message_type:"clear_screen"});
+  chrome.tabs.sendMessage(tabs[0].id, {message_type: "clear_screen"});
 });
 
 // Get active tab url and save pathmark to sync storage

@@ -180,5 +180,12 @@ chrome[runtimeOrExtension].onMessage.addListener(
       else if (request.message_type === "clear_screen") {
         clearScreen();
       }
+      else if (request.message_type === "bookmark_alert") {
+        var key = "Ctrl-";
+        if (/mac/i.test(navigator.platform)) {
+          key = "Cmd-";
+        }
+        alert("You haven't created a path yet. Try browsing some more. \n\nYou can bookmark this page by hitting " + key + "D");
+      }
     });
 
