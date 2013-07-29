@@ -193,7 +193,9 @@ chrome[runtimeOrExtension].onMessage.addListener(
 
 // Send referree to content script 
 chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
-  chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {message_type: "save_ref"});
-  });
+  if (! /instant/.test(details.url)) {
+    chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, {message_type: "save_ref"});
+    });
+  }
 });
