@@ -1,6 +1,6 @@
 {
   "name": "Pathmarks",
-    "version": "1.4",
+    "version": "1.4.1",
     "description": "Creates pathmarks.",
     "icons": {
       "16": "pathmark16.png",
