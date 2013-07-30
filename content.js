@@ -128,7 +128,7 @@ var visualize = function (pathmark) {
   overlay.addEventListener('click', clearScreen, false);
 
   // Resize canvas when window is resized
-  window.addEventListener( 'resize', onWindowResize, false );
+  window.addEventListener('resize', onWindowResize, false);
 
   getPathmark(pathmark, []);
 }
