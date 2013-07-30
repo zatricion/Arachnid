@@ -1,4 +1,6 @@
-;
+; // typo? Chrome's isolated world generaly protects against
+  // weird scope clobering.
+  
 // Compatibility
 var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
 
@@ -24,6 +26,9 @@ chrome.storage.local.get("REF", function (data) {
 //
 
 var getFavicon = function (url, callback) {
+  // seeing regexes for url parsing always makes me a bit nervous =)
+  // consider something like http://stackoverflow.com/a/6644749/1231454 instead,
+  // which I also think is clearer.
   var favicon;
   var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
   var favCheck = /(?:https?:)?(?:\/*)(.*?)(?:\/*)favicon.ico/;
