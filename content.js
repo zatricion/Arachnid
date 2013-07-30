@@ -1,4 +1,6 @@
-;
+; // typo? Chrome's isolated world generaly protects against
+  // weird scope clobering.
+  
 // Compatibility
 var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
 
@@ -24,6 +26,9 @@ chrome.storage.local.get("REF", function (data) {
 //
 
 var getFavicon = function (url, callback) {
+  // seeing regexes for url parsing always makes me a bit nervous =)
+  // consider something like http://stackoverflow.com/a/6644749/1231454 instead,
+  // which I also think is clearer.
   var favicon;
   var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
   var favCheck = /(?:https?:)?(?:\/*)(.*?)(?:\/*)favicon.ico/;
@@ -79,6 +84,9 @@ var getFavicon = function (url, callback) {
 }
 
 var getPathmark = function (name, links) {
+  // I find this function pretty confusing.
+  // consider changing links to a callback that receives links,
+  // then changing some of the naming below (ie item/thing/thing2).
   chrome.storage.sync.get(null, function (pathmarks) {
     pathmarks[name].forEach(function (markInd) {
       for (item in pathmarks[markInd]) {

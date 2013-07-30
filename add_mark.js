@@ -19,6 +19,9 @@ var buttonListener =  function () {
   window.close();
 }
 
+// consider renaming this since it's a handler, not a field
+// (I generally stick to Brandon's recommendations:
+//  http://pyvideo.org/video/1676/the-naming-of-ducks-where-dynamic-types-meet-sma)
 var keyDownTextField = function (e) {
   if (e.keyCode == 13) {
    buttonListener();
