@@ -84,6 +84,9 @@ var getFavicon = function (url, callback) {
 }
 
 var getPathmark = function (name, links) {
+  // I find this function pretty confusing.
+  // consider changing links to a callback that receives links,
+  // then changing some of the naming below (ie item/thing/thing2).
   chrome.storage.sync.get(null, function (pathmarks) {
     pathmarks[name].forEach(function (markInd) {
       for (item in pathmarks[markInd]) {
