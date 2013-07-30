@@ -11,6 +11,7 @@
       .on("tick", tick)
       .start();
 
+    // consider pulling some/all of these styles out to css
     var tooltip = d3.select("body")
       .append("div")
       .style("position", "fixed")
