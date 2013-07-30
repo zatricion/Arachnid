@@ -19,7 +19,7 @@ var buttonListener =  function () {
   window.close();
 }
 
-var keyDownTextField = function (e) {
+var enterKeyListener = function (e) {
   if (e.keyCode == 13) {
    buttonListener();
   }
@@ -32,7 +32,7 @@ var main = function () {
   markName.select();
 
   // Submit on Enter key
-  markName.addEventListener("keydown", keyDownTextField, false);
+  markName.addEventListener("keydown", enterKeyListener, false);
   
   // Submit on button click
   var submit = document.getElementById('submit');
