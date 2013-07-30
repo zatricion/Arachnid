@@ -29,7 +29,7 @@ var getFavicon = function (url, callback) {
   a.href = url;
   var domain = 'http://' + a.hostname;
   var favCheck = /(?:https?:)?(?:\/*)(.*?)(?:\/*)favicon.(ico|png|jpg|jpeg)/;
-  var urlCheck = /^(\/)(?!\/)/;
+  var oneSlash = /^(\/)(?!\/)/;
   var dfd = $.Deferred();
 
   // Try to get favicon from cache, otherwise find it, then cache it
@@ -46,9 +46,8 @@ var getFavicon = function (url, callback) {
               favicon =  $("<div>").html(data).find('link[rel*="icon"]').attr("href");
               if (favicon) {
                 // See if the favicon needs the domain prepended
-                check = favCheck.exec(favicon);
-                if (check && !check[1]) {
-                  if (urlCheck.test(favicon)) {
+                if (favCheck.test(favicon) && !/^\/{2}/.test(favicon)) {
+                  if (oneSlash.test(favicon)) {
                     favicon = domain + favicon;
                   } else {
                     favicon = domain + '/' + favicon;
