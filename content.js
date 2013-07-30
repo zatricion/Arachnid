@@ -1,4 +1,3 @@
-;
 // Compatibility
 var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';
 
@@ -25,10 +24,12 @@ chrome.storage.local.get("REF", function (data) {
 
 var getFavicon = function (url, callback) {
   var favicon;
-  var stripRe = /([\w]+\.){1}([\w]+\.?)+/;
-  var favCheck = /(?:https?:)?(?:\/*)(.*?)(?:\/*)favicon.ico/;
-  var urlCheck = /^(\/|\.)(?!\/)/;
-  var domain = 'http://' + stripRe.exec(url)[0];
+  // Parse url
+  var a = document.createElement('a');
+  a.href = url;
+  var domain = 'http://' + a.hostname;
+  var favCheck = /(?:https?:)?(?:\/*)(.*?)(?:\/*)favicon.(ico|png|jpg|jpeg)/;
+  var urlCheck = /^(\/)(?!\/)/;
   var dfd = $.Deferred();
 
   // Try to get favicon from cache, otherwise find it, then cache it
@@ -44,11 +45,14 @@ var getFavicon = function (url, callback) {
             function (data) {
               favicon =  $("<div>").html(data).find('link[rel*="icon"]').attr("href");
               if (favicon) {
+                // See if the favicon needs the domain prepended
                 check = favCheck.exec(favicon);
                 if (check && !check[1]) {
-                  favicon = domain + '/favicon.ico';
-                } else if (urlCheck.test(favicon)) {
+                  if (urlCheck.test(favicon)) {
                     favicon = domain + favicon;
+                  } else {
+                    favicon = domain + '/' + favicon;
+                  }
                 }
               } else {
                   favicon = domain + '/favicon.ico';
