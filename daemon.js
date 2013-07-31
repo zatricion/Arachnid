@@ -192,9 +192,16 @@ chrome[runtimeOrExtension].onMessage.addListener(
 
 // Send referree to content script 
 chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
-  if (! /instant/.test(details.url)) {
+  if (! /chrome-instant/.test(details.url)) {
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
       chrome.tabs.sendMessage(tabs[0].id, {message_type: "save_ref"});
     });
+  }
+});
+
+// Don't keep references when opening a new tab
+chrome.tabs.onCreated.addListener(function (tab) {
+  if (tab.url === "chrome://newtab/") {
+    nodes.set({REF: ""});  
   }
 });

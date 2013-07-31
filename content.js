@@ -14,7 +14,9 @@ var send = function (referrer, url) {
 
 // Add node to graph
 chrome.storage.local.get("REF", function (data) {
-  var ref = data.REF || document.referrer;
+  var backup = document.referrer;
+  var backup = backup.substr(backup.indexOf(':') + 1);
+  var ref = data.REF || backup;
   send(ref, URL);
   chrome.storage.local.set({REF: ""});
 });
@@ -179,7 +181,6 @@ var getNodes = function (links) {
   });
 
   urlArr = Object.keys(nodes);
-  console.log(urlArr);
   var deferred = [];
   for (var i = 0; i < urlArr.length; i++) {
     // Get all favicons before drawing visualization
@@ -189,7 +190,6 @@ var getNodes = function (links) {
   }
   $.when.apply($, deferred).then(function () {
     // Call D3 script
-    console.log(nodes);
     plotPathmark(links, nodes, width, height);
   });
 }
@@ -200,15 +200,11 @@ var getTimestampList = function (links) {
   links.forEach(function (link) {
     timestampList.push(link.time);
   });
-  console.log(timestampList);
   var min = Math.min.apply(this, timestampList);
-  console.log(min);
   var max = Math.max.apply(this, timestampList);
-  console.log(max);
   for (var i = 0; i < timestampList.length; i++) {
     timestampList[i] = (timestampList[i] - min) / (max - min);
   }
-  console.log(timestampList);
   return timestampList;
 }
 
