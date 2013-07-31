@@ -113,6 +113,18 @@ var onWindowResize = function (event) {
   overlayContext.fillRect( 0, 0, overlay.width, overlay.height );
 }
 
+var clearScreen = function () {
+  d3.select('svg').remove();
+  d3.select('canvas').remove();
+}
+
+var switchVis = function () {
+  var e = document.createEvent('UIEvents');
+  var svg = document.getElementsByTagName("svg")[0];
+  e.initUIEvent('dblclick', true, true, window, 1);
+  svg.dispatchEvent(e);
+}
+
 var visualize = function (pathmark) {
   overlay = document.createElement( 'canvas' );
   document.body.appendChild(overlay);
@@ -122,7 +134,7 @@ var visualize = function (pathmark) {
   overlay.style.top = 0;
   overlay.style.zIndex = 111111111;
   onWindowResize();
-
+  
   // Remove Visualization on background click
   overlay.addEventListener('click', clearScreen, false);
 
@@ -130,11 +142,6 @@ var visualize = function (pathmark) {
   window.addEventListener('resize', onWindowResize, false);
 
   getPathmark(pathmark, []);
-}
-
-var clearScreen = function () {
-  d3.select('svg').remove();
-  d3.select('canvas').remove();
 }
 
 // Compute the distinct nodes from the links.
@@ -204,10 +211,13 @@ var getTimestampList = function (links) {
   return timestampList;
 }
 
-// Esc key clears the screen
+// Esc key clears the screen, tab switches visualization
 document.addEventListener("keydown", function(e) {
   if (e.keyCode === 27) {
     clearScreen();
+  } else if (e.keyCode === 9) {
+    e.preventDefault();
+    switchVis();
   }
 });
 

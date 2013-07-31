@@ -1,7 +1,8 @@
 ;
 (function () {
   plotPathmark = function (links, nodes, width, height) {  
-    
+    var timelineVis = true;
+
     var force = d3.layout.force()
       .nodes(d3.values(nodes))
       .links(links)
@@ -29,7 +30,8 @@
       .style("top", 0)
       .style("position", "fixed")
       .style("z-index", 111111112)
-      .style("pointer-events", "none");
+      .style("pointer-events", "none")
+      .on("dblclick", update);
 
     var link = svg.selectAll(".link")
       .data(force.links())
@@ -80,14 +82,30 @@
       .text(function(d) { return d.name; });
 
     function tick() {
-      link
-        .attr("x1", function(d) { return d.source.xt; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.xt; })
-        .attr("y2", function(d) { return d.target.y; });
+      if (timelineVis) {
+        link
+          .attr("x1", function(d) { return d.source.xt; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.xt; })
+          .attr("y2", function(d) { return d.target.y; });
 
-      node
-        .attr("transform", function(d) { return "translate(" + d.xt + "," + d.y + ")"; });
+        node
+          .attr("transform", function(d) { return "translate(" + d.xt + "," + d.y + ")"; });
+      } else {
+        link
+          .attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
+
+        node
+          .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      }
+    }
+
+    function update() {
+      timelineVis = ! timelineVis;
+      force.start();
     }
 
     function mouseover() {
