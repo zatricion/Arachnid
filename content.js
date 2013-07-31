@@ -46,7 +46,7 @@ var getFavicon = function (url, callback) {
               favicon =  $("<div>").html(data).find('link[rel*="icon"]').attr("href");
               if (favicon) {
                 // See if the favicon needs the domain prepended
-                if (favCheck.test(favicon) && !/^\/{2}/.test(favicon)) {
+                if (favCheck.test(favicon) && !/^(https?:)?\/{2}/.test(favicon)) {
                   if (oneSlash.test(favicon)) {
                     favicon = domain + favicon;
                   } else {
@@ -84,16 +84,16 @@ var getFavicon = function (url, callback) {
 var getPathmark = function (name, links) {
   chrome.storage.sync.get(null, function (pathmarks) {
     pathmarks[name].forEach(function (markInd) {
-      for (item in pathmarks[markInd]) {
-        pathmarks[markInd][item].forEach(function (thing) {
-          if (thing.in_node) {
-            var thing2 = {
-              source: thing.in_node,
-              target: item,
-              time: thing.timestamp
+      for (mark in pathmarks[markInd]) {
+        pathmarks[markInd][mark].forEach(function (pathmark) {
+          if (pathmark.in_node) {
+            var link = {
+              source: pathmark.in_node,
+              target: mark,
+              time: pathmark.timestamp
             }; 
 
-            links.push(thing2);
+            links.push(link);
           }
         });
       }
@@ -111,7 +111,6 @@ var onWindowResize = function (event) {
   overlay.height = height;
   overlayContext.fillStyle = 'rgba( 0, 0, 0, 0.7 )';
   overlayContext.fillRect( 0, 0, overlay.width, overlay.height );
-  d3.select('svg').attr("width", width).attr("height", height);
 }
 
 var visualize = function (pathmark) {
@@ -140,10 +139,29 @@ var clearScreen = function () {
 
 // Compute the distinct nodes from the links.
 var getNodes = function (links) {
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+  if (links.length > 1) {
+    var times = getTimestampList(links);
+  } else {
+    var times = [0.5];
+  }
+  links.forEach(function(link, index) { link.time = times[index]; });
+
   var nodes = {};
   links.forEach(function(link) {
-    link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-    link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+    link.target = 
+        nodes[link.target] || (nodes[link.target] = {
+                                  name: link.target,
+                                    xt: width * (link.time * 0.9 + 0.05),
+                                     y: height / 2,
+                                 fixed: false,});
+    link.source = 
+        nodes[link.source] || (nodes[link.source] = {
+                                  name: link.source,
+                                    xt: width * (link.time * 0.9 + 0.05),
+                                     y: height / 2,
+                                 fixed: false,});
   });
 
   urlArr = Object.keys(nodes);
@@ -158,8 +176,26 @@ var getNodes = function (links) {
   $.when.apply($, deferred).then(function () {
     // Call D3 script
     console.log(nodes);
-    plotPathmark(links, nodes, window.innerWidth, window.innerHeight);
+    plotPathmark(links, nodes, width, height);
   });
+}
+
+// Get a normalized list of timestamps from a list of links
+var getTimestampList = function (links) {
+  var timestampList = [];
+  links.forEach(function (link) {
+    timestampList.push(link.time);
+  });
+  console.log(timestampList);
+  var min = Math.min.apply(this, timestampList);
+  console.log(min);
+  var max = Math.max.apply(this, timestampList);
+  console.log(max);
+  for (var i = 0; i < timestampList.length; i++) {
+    timestampList[i] = (timestampList[i] - min) / (max - min);
+  }
+  console.log(timestampList);
+  return timestampList;
 }
 
 // Esc key clears the screen

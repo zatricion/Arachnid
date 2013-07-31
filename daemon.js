@@ -13,7 +13,7 @@ nodes.set({REF: ""});
 var createNode = function (url, referrer) {
   var edge = {
     in_node: referrer,
-    timestamp: Date()
+    timestamp: Date.now()
   };
 
   nodes.get(url, function(currentNode){
@@ -68,8 +68,7 @@ saveRecents = function (minutes, callback) {
     cutoffTime = Date.now() - (1000 * 60 * minutes);
     for (item in refObj) {
       refObj[item].forEach(function (edge) {
-        time = new Date(edge.timestamp).getTime();
-        if (time > cutoffTime) {
+        if (edge.timestamp > cutoffTime) {
           output[item] = output[item] || [];
           output[item].push(edge);
         }});

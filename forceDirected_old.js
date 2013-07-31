@@ -6,8 +6,8 @@
       .nodes(d3.values(nodes))
       .links(links)
       .size([width, height])
-      .linkDistance(200)
-      .charge(-1000)
+      .linkDistance(60)
+      .charge(-300)
       .on("tick", tick)
       .start();
 
@@ -81,13 +81,13 @@
 
     function tick() {
       link
-        .attr("x1", function(d) { return d.source.xt; })
+        .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.xt; })
+        .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
       node
-        .attr("transform", function(d) { return "translate(" + d.xt + "," + d.y + ")"; });
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
     }
 
     function mouseover() {
