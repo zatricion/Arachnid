@@ -148,20 +148,26 @@ var getNodes = function (links) {
   }
   links.forEach(function(link, index) { link.time = times[index]; });
 
+  // Sort the links by time
+  links.sort(function(a,b) {return (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0);} );
+  
   var nodes = {};
   links.forEach(function(link) {
-    link.target = 
-        nodes[link.target] || (nodes[link.target] = {
-                                  name: link.target,
-                                    xt: width * (link.time * 0.9 + 0.05),
-                                     y: height / 2,
-                                 fixed: false,});
-    link.source = 
-        nodes[link.source] || (nodes[link.source] = {
-                                  name: link.source,
-                                    xt: width * (link.time * 0.9 + 0.05),
-                                     y: height / 2,
-                                 fixed: false,});
+    link.target = nodes[link.target] ||
+      (nodes[link.target] = {
+         name: link.target,
+           xt: width * (link.time * 0.7 + 0.2),
+            y: height / 2,
+      });
+  });
+
+  links.forEach(function(link) {
+    link.source = nodes[link.source] ||
+      (nodes[link.source] = {
+         name: link.source,
+           xt: width * (link.time * 0.7 + 0.1),
+            y: height / 2,
+      });
   });
 
   urlArr = Object.keys(nodes);
