@@ -40,6 +40,11 @@
       .style("stroke", "white")
       .style("stroke-width", 3);
 
+    var node_drag = d3.behavior.drag()
+      .on("dragstart", dragstart)
+      .on("drag", dragmove)
+      .on("dragend", dragend);
+
     var node = svg.selectAll(".node")
       .data(force.nodes())
       .enter().append("g")
@@ -48,7 +53,7 @@
       .on("mouseover", mouseover)
       .on("mouseout", mouseout)
       .on("click", click)
-      .call(force.drag);
+      .call(node_drag);
 
     var defs = svg.append("defs");
 
@@ -81,6 +86,24 @@
       .append("title")
       .text(function(d) { return d.name; });
 
+    function dragstart(d, i) {
+      force.stop() // stops the force auto positioning before you start dragging
+    }
+
+    function dragmove(d, i) {
+      d.px += d3.event.dx;
+      d.py += d3.event.dy;
+      d.x += d3.event.dx;
+      d.y += d3.event.dy; 
+      tick(); 
+    }
+
+    function dragend(d, i) {
+      d.fixed = true;
+      tick();
+      force.resume();
+    }
+
     function tick() {
       if (timelineVis) {
         link
@@ -105,6 +128,7 @@
 
     function update() {
       timelineVis = ! timelineVis;
+      node.each(function (d) { d.fixed = false; });
       force.start();
     }
 
