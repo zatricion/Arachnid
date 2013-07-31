@@ -14,7 +14,8 @@ var send = function (referrer, url) {
 
 // Add node to graph
 chrome.storage.local.get("REF", function (data) {
-  send(data.REF, URL);
+  var ref = data.REF || document.referrer;
+  send(ref, URL);
   chrome.storage.local.set({REF: ""});
 });
 
