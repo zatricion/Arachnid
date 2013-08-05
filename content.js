@@ -31,7 +31,6 @@ var getFavicon = function (url, callback) {
   var a = document.createElement('a');
   a.href = url;
   var domain = 'http://' + a.hostname;
-  var favCheck = /(?:https?:)?(?:\/*)(.*?)(?:\/*)favicon.(ico|png|jpg|jpeg)/;
   var oneSlash = /^(\/)(?!\/)/;
   var dfd = $.Deferred();
 
@@ -49,7 +48,7 @@ var getFavicon = function (url, callback) {
               favicon =  $("<div>").html(data).find('link[rel*="icon"]').attr("href");
               if (favicon) {
                 // See if the favicon needs the domain prepended
-                if (favCheck.test(favicon) && !/^(https?:)?\/{2}/.test(favicon)) {
+                if (!/^(https?:)?\/{2}/.test(favicon)) {
                   if (oneSlash.test(favicon)) {
                     favicon = domain + favicon;
                   } else {
@@ -119,6 +118,7 @@ var onWindowResize = function (event) {
 var clearScreen = function () {
   d3.select('svg').remove();
   d3.select('canvas').remove();
+  d3.select('#tooltip').remove();
 }
 
 var switchVis = function () {
@@ -130,7 +130,8 @@ var switchVis = function () {
 
 var visualize = function (pathmark) {
   overlay = document.createElement( 'canvas' );
-  document.body.appendChild(overlay);
+  var html = document.getElementsByTagName("html")[0];
+  html.appendChild(overlay);
   overlayContext = overlay.getContext( '2d' );
   overlay.style.position = 'fixed';
   overlay.style.left = 0;

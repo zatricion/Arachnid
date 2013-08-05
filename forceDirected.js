@@ -12,8 +12,9 @@
       .on("tick", tick)
       .start();
 
-    var tooltip = d3.select("body")
+    var tooltip = d3.select("html")
       .append("div")
+      .attr("id", "tooltip")
       .style("position", "fixed")
       .style("white-space", "nowrap")
       .style("z-index", 111111221)
@@ -24,7 +25,7 @@
       .style("color", "white")
       .style("font-size", "32px");
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("html").append("svg")
       .attr("viewBox", "0 0 " + width + " " + height ) 
       .style("left", 0)
       .style("top", 0)
