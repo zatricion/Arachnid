@@ -119,6 +119,7 @@ var clearScreen = function () {
   d3.select('svg').remove();
   d3.select('canvas').remove();
   d3.select('#tooltip').remove();
+  document.removeEventListener('keydown', keyListener, false);
 }
 
 var switchVis = function () {
@@ -144,7 +145,10 @@ var visualize = function (pathmark) {
 
   // Resize canvas when window is resized
   window.addEventListener('resize', onWindowResize, false);
-
+  
+  // Tab and Esc key listener
+  document.addEventListener('keydown', keyListener, false);
+  
   getPathmark(pathmark, []);
 }
 
@@ -210,14 +214,15 @@ var getTimestampList = function (links) {
 }
 
 // Esc key clears the screen, tab switches visualization
-document.addEventListener("keydown", function(e) {
+var keyListener = function(e) {
   if (e.keyCode === 27) {
     clearScreen();
   } else if (e.keyCode === 9) {
     e.preventDefault();
     switchVis();
   }
-});
+}
+
 
 chrome[runtimeOrExtension].onMessage.addListener(
     function(request, sender, sendResponse) {
