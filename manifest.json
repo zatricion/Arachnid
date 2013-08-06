@@ -1,7 +1,8 @@
 {
   "name": "Pathmarks",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "description": "Creates pathmarks.",
+    "options_page": "options.html",
     "icons": {
       "16": "pathmark16.png",
       "48": "pathmark48.png",

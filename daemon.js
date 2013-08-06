@@ -1,7 +1,6 @@
-;
-
 var nodes = chrome.storage.local;
 var pmarks = chrome.storage.sync;
+var longAgo = localStorage["longAgo"] || 10;
 
 // Clear chrome local storage each session
 nodes.clear();
@@ -121,7 +120,7 @@ var createPathmark = function (index, stripped, title, option) {
     });
   } else if (option === "recents") {
     // Ten Minutes Ago is "recent", but allow specify in options page
-    saveRecents(10, function (output) { 
+    saveRecents(longAgo, function (output) {
       if (checkPathmark(output)) {
         setMark(output, index, title); 
       }
@@ -160,6 +159,10 @@ var removePathmark = function (name) {
     });
     pmarks.remove(name);
   });
+}
+
+var refreshOptions = function () {
+  longAgo = localStorage["longAgo"];
 }
 
 //           //
