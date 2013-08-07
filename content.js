@@ -45,7 +45,9 @@ var getFavicon = function (url, callback) {
       $.get(url)
           .success(
             function (data) {
-              favicon =  $("<div>").html(data).find('link[rel*="icon"]').attr("href");
+              favicon =  $("<div>").html(data)
+                                   .find('link[rel="icon"], link[rel="shortcut icon"]')
+                                   .attr("href");
               if (favicon) {
                 // See if the favicon needs the domain prepended
                 if (!/^(https?:)?\/{2}/.test(favicon)) {
