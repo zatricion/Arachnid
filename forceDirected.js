@@ -105,6 +105,17 @@
       force.resume();
     }
 
+    // http://stackoverflow.com/questions/13463053/calm-down-initial-tick-of-a-force-layout
+    function forwardAlpha(layout, alpha, max) {
+      alpha = alpha || 0;
+      max = max || 1000;
+      var i = 0;
+      while(layout.alpha() > alpha && i++ < max) layout.tick();
+    }
+
+    // Get rid of annoying "bouncy" visualization start
+    forwardAlpha(force, 0.03);
+
     function tick() {
       if (timelineVis) {
         link
