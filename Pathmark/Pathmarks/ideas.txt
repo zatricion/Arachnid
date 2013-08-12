@@ -1,0 +1,19 @@
+Here is where I sketch out my ideas for the Arachnid project.
+
+
+Plan:
+
+Visualization:
+1. Delete individual pathmarks
+2. Blue to start, Red to end
+3. Timeline - default visualization
+4. Drag to connect nodes
+5. Right click to remove nodes
+6. Merge pathmarks?
+
+Arachnid:
+1. JSON strings to collect pathmarks?
+2. Slider to show rings of suggestions
+3. Pathmark aggregation -> 2 points for ends, 1 for just being in the same pmark
+
+

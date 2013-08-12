@@ -1,10 +1,10 @@
 Arachnid
 ========
 
-Arachnid consists of a Chrome extension called Pathmarks and a knowledge web tentatively named Spiderweb.
+Arachnid consists of a Chrome extension called Pathmark and a knowledge web tentatively named Spiderweb.
 
 
-Pathmarks
+Pathmark
 ---------
 Pathmarks let you visualize your path through the web. You can choose to pathmark a page (get only the path to that website),
 recent pages, or an entire browsing session.
