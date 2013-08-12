@@ -1,0 +1,39 @@
+div {
+  border: 0px;
+  background: white;
+  width: 300px;
+}
+
+body {
+  margin: 2px;
+}
+
+#menu:hover .choice {
+  background-color: white;
+}
+
+.choice {
+  font-family: helvetica;
+  font-size: 14px;
+  color: black;
+  text-decoration: none;
+  display: block;
+  padding-bottom: 3px;
+}
+
+.choice:hover {
+  background-color: #D9E9FA!important;
+}
+
+.choice:focus {
+  outline: none;
+  background-color: #D9E9FA;
+}
+
+.divider {
+  height: 2px;
+  margin: 0px 0px;
+  overflow: hidden;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid #ffffff;
+}
