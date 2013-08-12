@@ -29,8 +29,7 @@ The extension can be found here: https://chrome.google.com/webstore/detail/pathm
 Spiderweb
 ---------
 Each pathmarks documents the sites a user navigated through before finding their desired information.
-As such, membership in a pathmark is a vastly more useful measure of the importance of a page with regards
-to a particular search query than link-based metrics such as PageRank. 
+As such, membership in a pathmark could be a more useful measure of the importance of a page with regards to a particular search query than link-based metrics such as PageRank. In addition, searches can be carried out by supplying an interesting URL rather than a traditional query.
 
 An optional setting in the Pathmarks extension will allow users to anonymously send their pathmarks to Spiderweb.
 Spiderweb will then aggregate the pathmarks to provide recommendations based on a given URL or search query.
