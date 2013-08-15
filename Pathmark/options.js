@@ -50,6 +50,8 @@ function restoreDefaultSend () {
 function restoreDefaults () {
   restoreDefaultSend();
   restoreDefaultLongAgo();
+
+  chrome.extension.getBackgroundPage().refreshOptions();
 }
 
 document.addEventListener("DOMContentLoaded", loadOptions, false);
