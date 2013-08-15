@@ -44,7 +44,7 @@ function restoreDefaultLongAgo () {
 function restoreDefaultSend () {
   var sender = document.getElementById("yes");
   sender.checked = true;
-  localStorage["sendToSpider"] = true;
+  localStorage["sendToSpider"] = "true";
 }
 
 function restoreDefaults () {

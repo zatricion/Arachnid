@@ -174,8 +174,8 @@ var removePathmark = function (name) {
 }
 
 var refreshOptions = function () {
-  longAgo = localStorage["longAgo"];
-  sendToSpider = localStorage["sendToSpider"]; 
+  longAgo = JSON.parse(localStorage["longAgo"]);
+  sendToSpider = JSON.parse(localStorage["sendToSpider"]); 
 }
 
 //           //
