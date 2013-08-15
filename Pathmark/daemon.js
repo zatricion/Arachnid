@@ -1,6 +1,7 @@
 var nodes = chrome.storage.local;
 var pmarks = chrome.storage.sync;
-var longAgo = localStorage["longAgo"] || 10;
+var longAgo = JSON.parse(localStorage["longAgo"]) || 10;
+var sendToSpider = JSON.parse(localStorage["sendToSpider"]) || true;
 
 // Clear chrome local storage each session
 nodes.clear();
@@ -94,6 +95,16 @@ var setInd = function (num) {
 // Given an object for a pathmark, sets the mark in sync storage
 var setMark = function (refObj, index, title) {
   var indLst = [];
+
+  // Send to spiderweb database
+  if (sendToSpider) {
+    $.ajax({
+        type: "POST",
+        url: "http://spiderweb.herokuapp.com",
+        data: JSON.stringify(refObj),
+    });
+  }
+  
   for (item in refObj) {
     indLst.push(index);
     var mark = {};
@@ -101,6 +112,7 @@ var setMark = function (refObj, index, title) {
     edge[item] = refObj[item];
     mark[index] = edge;
     pmarks.set(mark);
+
     index++;
   }
   var pathmark = {}
@@ -163,6 +175,7 @@ var removePathmark = function (name) {
 
 var refreshOptions = function () {
   longAgo = localStorage["longAgo"];
+  sendToSpider = localStorage["sendToSpider"]; 
 }
 
 //           //
