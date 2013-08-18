@@ -100,7 +100,7 @@ var setMark = function (refObj, index, title) {
   if (sendToSpider) {
     $.ajax({
         type: "POST",
-        url: "http://spiderweb.herokuapp.com",
+        url: "http://spiderweb.herokuapp.com/add_mark",
         data: JSON.stringify(refObj),
     });
   }
