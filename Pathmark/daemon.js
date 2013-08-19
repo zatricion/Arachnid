@@ -1,7 +1,7 @@
 var nodes = chrome.storage.local;
 var pmarks = chrome.storage.sync;
-var longAgo = JSON.parse(localStorage["longAgo"]) || 10;
-var sendToSpider = JSON.parse(localStorage["sendToSpider"]) || true;
+var longAgo = JSON.parse(localStorage["longAgo"] || 10);
+var sendToSpider = JSON.parse(localStorage["sendToSpider"] || true);
 
 // Clear chrome local storage each session
 nodes.clear();
