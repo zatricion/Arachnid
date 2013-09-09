@@ -1,10 +1,4 @@
-Arachnid
-========
-
-Arachnid consists of a Chrome extension called Pathmark and a knowledge web tentatively named Spiderweb.
-
-
-Pathmark
+Pathmark Chrome Extension
 ---------
 Pathmarks let you visualize your path through the web. You can choose to pathmark a page (get only the path to that website),
 recent pages, or an entire browsing session.
@@ -28,10 +22,17 @@ The extension can be found here: https://chrome.google.com/webstore/detail/pathm
 
 Spiderweb
 ---------
-Each pathmarks documents the sites a user navigated through before finding their desired information.
-As such, membership in a pathmark could be a more useful measure of the importance of a page with regards to a particular search query than link-based metrics such as PageRank. In addition, searches can be carried out by supplying an interesting URL rather than a traditional query.
+Each pathmark documents the sites a user navigated through before finding their desired information.
 
-An optional setting in the Pathmarks extension will allow users to anonymously send their pathmarks to Spiderweb.
-Spiderweb will then aggregate the pathmarks to provide recommendations based on a given URL or search query.
+An optional setting in the Pathmarks extension allows users to anonymously send their pathmarks to Spiderweb.
+Spiderweb aggregates the pathmarks to provide recommendations based on a given URL.
+
+Installing the Pathmark Chrome Extension adds an item to the context menu accessed by right-clicking in any website.
+
+To open the Spiderweb for any site:
+1. Have the Pathmark extension installed in the Google Chrome browser
+2. Right click on any page
+3. Select "Follow the Spiders"
+
 
 
