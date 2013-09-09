@@ -30,6 +30,7 @@ Spiderweb aggregates the pathmarks to provide recommendations based on a given U
 Installing the Pathmark Chrome Extension adds an item to the context menu accessed by right-clicking in any website.
 
 To open the Spiderweb for any site:
+----------------------------------
 1. Have the Pathmark extension installed in the Google Chrome browser
 2. Right click on any page
 3. Select "Follow the Spiders"
