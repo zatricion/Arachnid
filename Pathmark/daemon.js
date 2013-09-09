@@ -221,3 +221,23 @@ chrome.tabs.onCreated.addListener(function (tab) {
     nodes.set({REF: ""});  
   }
 });
+
+//                //
+//  Context Menu  //
+//                //
+
+var contextClick = function (e) {
+  var search = e.pageUrl;
+  var spiderUrl = "http://spiderweb.herokuapp.com/path/";
+
+  // get spiderweb
+  chrome.tabs.create({"url" : spiderUrl + search});
+};
+
+chrome.contextMenus.create({
+  "title": "Follow the Spiders",
+  "contexts": ["page", "selection", "link"],
+  "onclick" : contextClick,
+});
+
+
