@@ -1,0 +1,32 @@
+{
+  "name": "Pathmark",
+    "version": "1.8",
+    "description": "Creates pathmarks.",
+    "options_page": "options.html",
+    "icons": {
+      "16": "pathmark16.png",
+      "48": "pathmark48.png",
+      "128": "pathmark128.png"
+    },
+    "permissions": ["tabs",
+		    "webNavigation", 
+		    "storage", 
+		    "http://spiderweb.herokuapp.com/",
+		    "contextMenus"],
+    "browser_action": {
+      "default_popup": "spider.html",
+      "default_icon": "pathmark48.png"
+    },
+    "background": {
+      "page": "background.html",
+      "persistent": true
+    },
+    "content_scripts": [
+    {
+      "matches": ["http://*/*","https://*/*"],
+      "js": ["d3.v3/d3.v3.min.js", "jquery-1.9.1.min.js",
+        "content.js", "forceDirected.js"]
+    }
+  ],
+    "manifest_version": 2
+}
