@@ -37,3 +37,8 @@ body {
   background-color: #e5e5e5;
   border-bottom: 1px solid #ffffff;
 }
+
+.selected {
+  outline: none;
+  background-color: #D9FAEA;
+}

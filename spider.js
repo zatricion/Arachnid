@@ -22,6 +22,10 @@ var startVisualization = function () {
   window.location.replace("choose_mark.html");
 }
 
+var switchProject = function () {
+  window.location.replace("switch.html");
+}
+
 var buildMenu =  function (divName) {
   var menu = document.getElementById(divName);
   var anchors = menu.getElementsByTagName('a');
@@ -41,7 +45,6 @@ var buildMenu =  function (divName) {
     addMark("both");
   }, false);
 
-
   // Visualize Pathmarks
   anchors[3].addEventListener('click', function () {
     startVisualization(); 
@@ -53,6 +56,11 @@ var buildMenu =  function (divName) {
       chrome.tabs.sendMessage(tabs[0].id, {message_type:"clear"});
     });
   }, true);
+
+  // Switch Projects
+  anchors[5].addEventListener('click', function () {
+    switchProject();
+  }, false);
 }
 
 document.addEventListener('DOMContentLoaded', function () {

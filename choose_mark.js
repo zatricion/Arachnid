@@ -4,7 +4,7 @@ var main = function () {
 
   chrome.storage.sync.get(null, function (pathmarks) {
     for (name in pathmarks) {
-      if (name !== "favicons" && name != "index" && !intRegex.test(name)) {
+      if (name !== "favicons" && name !== "index" && name !== "my_projects" && !intRegex.test(name)) {
         var a = document.createElement('a');
         var linkText = document.createTextNode(name);
         a.appendChild(linkText);
